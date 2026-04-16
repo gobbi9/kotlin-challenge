@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.main.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.test.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/coupon-kotlin.iml" filepath="$PROJECT_DIR$/.idea/coupon-kotlin.iml" />
+    </modules>
+  </component>
+</project>
