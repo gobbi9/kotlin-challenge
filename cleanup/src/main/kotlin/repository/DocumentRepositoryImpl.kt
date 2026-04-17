@@ -1,4 +1,4 @@
-package it.schwarz.einvoice.cleanup.repository
+package it.schwarz.coupon.cleanup.repository
 
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoDatabase

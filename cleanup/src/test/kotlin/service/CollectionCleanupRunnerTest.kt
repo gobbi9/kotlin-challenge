@@ -3,9 +3,9 @@ package service
 import com.mongodb.client.model.Filters
 import io.kotest.core.spec.style.StringSpec
 import io.mockk.mockk
-import it.schwarz.einvoice.cleanup.repository.DocumentRepository
-import it.schwarz.einvoice.cleanup.service.CleanupRunner
-import it.schwarz.einvoice.cleanup.service.CollectionCleanupRunner
+import it.schwarz.coupon.cleanup.repository.DocumentRepository
+import it.schwarz.coupon.cleanup.service.CleanupRunner
+import it.schwarz.coupon.cleanup.service.CollectionCleanupRunner
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

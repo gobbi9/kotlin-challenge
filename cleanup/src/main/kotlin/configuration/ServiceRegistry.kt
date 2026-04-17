@@ -1,14 +1,14 @@
-package it.schwarz.einvoice.cleanup.configuration
+package it.schwarz.coupon.cleanup.configuration
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationEnvironment
 import io.ktor.server.application.install
 import io.ktor.server.config.ApplicationConfig
-import it.schwarz.einvoice.cleanup.repository.DocumentRepository
-import it.schwarz.einvoice.cleanup.repository.DocumentRepositoryImpl
-import it.schwarz.einvoice.cleanup.service.CleanupRunner
-import it.schwarz.einvoice.cleanup.service.CouponCleanupRunner
+import it.schwarz.coupon.cleanup.repository.DocumentRepository
+import it.schwarz.coupon.cleanup.repository.DocumentRepositoryImpl
+import it.schwarz.coupon.cleanup.service.CleanupRunner
+import it.schwarz.coupon.cleanup.service.CouponCleanupRunner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.bind

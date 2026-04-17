@@ -1,4 +1,4 @@
-package it.schwarz.einvoice.cleanup.service
+package it.schwarz.coupon.cleanup.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope

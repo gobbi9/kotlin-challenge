@@ -4,21 +4,16 @@ val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
 val logstashVersion: String by project
-val prometheusVersion: String by project
-val cohortVersion: String by project
 val kotestVersion: String by project
 val mockkVersion: String by project
 val ktlintVersion: String by project
 val sonarqubeVersion: String by project
-val exposedVersion: String by project
-val postgresVersion: String by project
 val koinVersion: String by project
-val hikaricpVersion: String by project
 val kotlinxDatetimeVersion: String by project
-val flywayVersion: String by project
 val julToSlfjVersion: String by project
 val jsonKotlinSchemaVersion: String by project
-val solaceVersion: String by project
+val kotlinLoggingVersion: String by project
+val mongoVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -39,15 +34,11 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-receivers")
-    }
-}
+kotlin { }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -75,47 +66,21 @@ dependencies {
     // Logging
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
-
-    // Monitoring: Metrics & HealthChecks
-    implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("io.ktor:ktor-server-metrics-micrometer-jvm:$ktorVersion")
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
-    implementation("com.sksamuel.cohort:cohort-ktor:$cohortVersion")
-    implementation("com.sksamuel.cohort:cohort-micrometer:$cohortVersion")
-    // implementation("com.sksamuel.cohort:cohort-http:$cohortVersion")
-    implementation("com.sksamuel.cohort:cohort-logback:$cohortVersion")
+    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
     // Serialization:
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
-    // Serialization of Date/Time, see https://github.com/Kotlin/kotlinx-datetime:
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
 
     // Koin:
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 
-    // Exposed (database access):
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-
-    // Authentication & Authorization:
-    implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktorVersion")
-
-    // database driver.
-    // Postgres:
-    implementation("org.postgresql:postgresql:$postgresVersion")
-    // Hikari DataSource for Connection Pooling
-    implementation("com.zaxxer:HikariCP:$hikaricpVersion")
-    // Flyway for database migration
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
-    // implementation("org.flywaydb:flyway-database-postgresql:$flyway_version") //needed from flyway v10 onwards
-
-    // Solace (Uncomment if needed)
-    // implementation("com.solace:solace-messaging-client:$solaceVersion")
+    // Mongo DB
+    implementation("org.mongodb:mongodb-driver-kotlin-sync:$mongoVersion")
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:${mongoVersion}")
+    implementation("org.mongodb:bson:${mongoVersion}")
+    implementation("org.mongodb:bson-kotlinx:${mongoVersion}")
 
     // Bridge from java jul logging to slf (logback) logging:
     implementation("org.slf4j:jul-to-slf4j:$julToSlfjVersion")

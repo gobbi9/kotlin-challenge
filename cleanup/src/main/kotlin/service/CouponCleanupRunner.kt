@@ -1,7 +1,7 @@
-package it.schwarz.einvoice.cleanup.service
+package it.schwarz.coupon.cleanup.service
 
 import com.mongodb.client.model.Filters
-import it.schwarz.einvoice.cleanup.repository.DocumentRepository
+import it.schwarz.coupon.cleanup.repository.DocumentRepository
 import org.bson.conversions.Bson
 import java.time.Instant
 import java.time.temporal.ChronoUnit

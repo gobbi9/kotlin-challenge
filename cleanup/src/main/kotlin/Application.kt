@@ -1,11 +1,11 @@
-package it.schwarz.einvoice.cleanup
+package it.schwarz.coupon.cleanup
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationStarted
 import io.ktor.server.application.ApplicationStopped
-import it.schwarz.einvoice.cleanup.configuration.configureKoin
-import it.schwarz.einvoice.cleanup.service.CleanupRunner
+import it.schwarz.coupon.cleanup.configuration.configureKoin
+import it.schwarz.coupon.cleanup.service.CleanupRunner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

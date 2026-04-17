@@ -5,7 +5,13 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.main.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup.test.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/coupon-kotlin.iml" filepath="$PROJECT_DIR$/.idea/coupon-kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/coupon-kotlin.iml" filepath="$PROJECT_DIR$/.idea/modules/coupon-kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.main.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.test.iml" filepath="$PROJECT_DIR$/.idea/modules/cleanup/coupon-kotlin.cleanup.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.iml" filepath="$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/service/coupon-kotlin.service.test.iml" />
     </modules>
   </component>
 </project>

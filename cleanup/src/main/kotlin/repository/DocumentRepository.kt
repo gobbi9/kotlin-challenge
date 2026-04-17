@@ -1,4 +1,4 @@
-package it.schwarz.einvoice.cleanup.repository
+package it.schwarz.coupon.cleanup.repository
 
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId

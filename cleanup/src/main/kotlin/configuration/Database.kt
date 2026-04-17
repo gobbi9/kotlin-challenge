@@ -1,4 +1,4 @@
-package it.schwarz.einvoice.cleanup.configuration
+package it.schwarz.coupon.cleanup.configuration
 
 import com.mongodb.MongoClientSettings
 import com.mongodb.kotlin.client.coroutine.MongoClient
