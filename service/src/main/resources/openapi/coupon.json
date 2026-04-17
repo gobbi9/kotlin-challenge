@@ -1,0 +1,101 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Coupon API",
+    "version": "v1",
+    "description": "The API to handle Coupons."
+  },
+  "paths": {
+    "/coupons": {
+      "get": {
+        "summary": "Get all coupons or the coupons for the specified codes.",
+        "operationId": "getCoupons",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CouponModel"
+                  }
+                }
+              }
+            },
+            "description": "All coupons (no requestBody) or all coupons found by the codes that were provided in the requestBody."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "examples": {
+                "Request coupons by codes": {
+                  "value": [
+                    "abc123",
+                    "45ab67"
+                  ]
+                }
+              }
+            }
+          },
+          "required": false
+        }
+      },
+      "post": {
+        "summary": "Create/persist a coupon.",
+        "operationId": "postCoupon",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Failed"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CouponModel"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CouponModel": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "discount": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "applicationCount": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "example": {
+          "code": "abc123",
+          "discount": 12.54,
+          "description": "best coupon ev4",
+          "applicationCount": 0
+        }
+      }
+    }
+  }
+}
