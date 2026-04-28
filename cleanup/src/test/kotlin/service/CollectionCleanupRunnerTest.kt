@@ -19,30 +19,28 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-class CollectionCleanupRunnerTest :
-    StringSpec({
+class CollectionCleanupRunnerTest : StringSpec({
 
-        "test do cleanup" {
-            runTest {
-                val runners =
-                    listOf(
-                        TestCouponCleanupRunner(delay = 100.milliseconds, scope = this),
-                        TestCouponCleanupRunner(delay = 1.minutes, scope = this),
-                        TestCouponCleanupRunner(delay = 2.hours, scope = this),
-                        TestCouponCleanupRunner(delay = 5.seconds, scope = this),
-                    )
-                val cleanup = CleanupRunner(cleanupRunners = runners.toTypedArray(), scope = this)
+    "Cleanup service should start and stop all cleanup runners" {
+        runTest {
+            val runners = listOf(
+                TestCouponCleanupRunner(delay = 100.milliseconds, scope = this),
+                TestCouponCleanupRunner(delay = 1.minutes, scope = this),
+                TestCouponCleanupRunner(delay = 2.hours, scope = this),
+                TestCouponCleanupRunner(delay = 5.seconds, scope = this),
+            )
+            val cleanup = CleanupRunner(cleanupRunners = runners.toTypedArray(), scope = this)
 
-                cleanup.start()
-                // wait to be finished
-                while (cleanup.isRunning()) {
-                    delay(50.milliseconds)
-                }
-
-                runners.forEach { assertFalse(it.isRunning()) }
+            cleanup.start()
+            // wait to be finished
+            while (cleanup.isRunning()) {
+                delay(50.milliseconds)
             }
+
+            runners.forEach { assertFalse(it.isRunning()) }
         }
-    }) {
+    }
+}) {
     class TestCouponCleanupRunner(
         val delay: Duration,
         scope: CoroutineScope,

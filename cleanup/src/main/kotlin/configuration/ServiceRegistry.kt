@@ -20,10 +20,10 @@ import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
 import java.time.Instant
 
-fun Application.configureKoin() {
-    val logger = KotlinLogging.logger {}
+private val log = KotlinLogging.logger {}
 
-    logger.debug { "configuring dependency injection" }
+fun Application.configureKoin() {
+    log.debug { "Configuring dependency injection using Koin" }
 
     install(Koin) {
         slf4jLogger()
@@ -67,8 +67,8 @@ fun Application.configureKoin() {
 
     @Suppress("UNUSED")
     with(monitor) {
-        subscribe(KoinApplicationStarted) { logger.info { "Koin started" } }
-        subscribe(KoinApplicationStopPreparing) { logger.info { "Koin stopping" } }
-        subscribe(KoinApplicationStopped) { logger.info { "Koin stopped" } }
+        subscribe(KoinApplicationStarted) { log.info { "Koin started" } }
+        subscribe(KoinApplicationStopPreparing) { log.info { "Koin stopping" } }
+        subscribe(KoinApplicationStopped) { log.info { "Koin stopped" } }
     }
 }

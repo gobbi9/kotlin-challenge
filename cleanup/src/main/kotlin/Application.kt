@@ -18,31 +18,29 @@ fun main(args: Array<String>) {
         .main(args)
 }
 
+private val log = KotlinLogging.logger {}
+
 @Suppress("unused")
 fun Application.module() {
-    val logger = KotlinLogging.logger {}
-
     configureKoin()
 
     with(monitor) {
         subscribe(ApplicationStarted) {
-            logger.info {
-                "Application started"
-            }
+            log.info { "Application started" }
 
             val cleanupRunner = get<CleanupRunner>()
             cleanupRunner.start()
             get<CoroutineScope>().launch {
                 while (cleanupRunner.isRunning()) {
-                    delay(5.toLong().seconds)
+                    delay(duration = 5.seconds)
                 }
 
-                logger.info { "CleanupRunner is finished. Stopping application." }
-                exitProcess(0)
+                log.info { "CleanupRunner is finished. Stopping application." }
+                exitProcess(status = 0)
             }
         }
         subscribe(ApplicationStopped) {
-            logger.info { "Stopping application" }
+            log.info { "Stopping application" }
         }
     }
 }
