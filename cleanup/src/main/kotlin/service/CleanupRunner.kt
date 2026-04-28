@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
@@ -23,7 +24,8 @@ class CleanupRunner(
         }
         job =
             scope.launch {
-                cleanupRunners.forEach { it.doCleanup() }
+                val jobs = cleanupRunners.map { it.doCleanup() }
+                jobs.joinAll()
             }
         logger.info { "CleanupRunner started" }
     }

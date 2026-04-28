@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import it.schwarz.coupon.cleanup.repository.DocumentRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
@@ -22,8 +23,8 @@ abstract class CollectionCleanupRunner(
         const val CREATION_DATE_TIME_FIELD_NAME = "creationDateTime"
     }
 
-    open fun doCleanup() {
-        scope.launch {
+    open fun doCleanup(): Job {
+        return scope.launch {
             val ids = getDocuments()
             logger.info { "Starting cleanup for ${ids.size} documents" }
             val batches = ids.chunked(1000)
@@ -41,8 +42,9 @@ abstract class CollectionCleanupRunner(
         }
     }
 
-    private suspend fun getDocuments(): List<ObjectId> = documentRepository.findIdsByCreationDateTimeLessThan(
-        getCollectionName(),
-        getFilter(),
-    )
+    private suspend fun getDocuments(): List<ObjectId> =
+        documentRepository.findIdsByCreationDateTimeLessThan(
+            getCollectionName(),
+            getFilter(),
+        )
 }
