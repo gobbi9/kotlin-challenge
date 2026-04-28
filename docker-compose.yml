@@ -1,0 +1,53 @@
+services:
+  cleanup:
+    restart: "no"
+    container_name: coupon-cleanup
+    depends_on:
+      coupon-db-init:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: cleanup/Dockerfile
+    env_file:
+      - cleanup/local.env
+    environment:
+      MONGODB_URI: mongodb://admin:admin@coupon-db:27017/?authSource=admin&replicaSet=coupon-db-rs
+    ports:
+      - "8083:8083"
+
+  coupon-db:
+    image: mongo:8.2.7
+    restart: unless-stopped
+    container_name: coupon-db
+    ports:
+      - "27017:27017"
+    command: ["--replSet", "coupon-db-rs", "--bind_ip_all"]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --host localhost --port 27017 --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  coupon-db-init:
+    image: mongo:8.2.7
+    container_name: coupon-db-init
+    depends_on:
+      coupon-db:
+        condition: service_healthy
+    restart: "no"
+    command:
+      - bash
+      - -c
+      - |
+        mongo='mongosh --host coupon-db --port 27017 --quiet'
+        retry() { for i in {1..30}; do sleep 1; eval "$$1" && return 0; done; echo >&2 "$$2"; exit 1; }
+
+        retry "$$mongo --eval 'db.adminCommand({ ping: 1 })' >/dev/null" 'error: unable to connect to db'
+        $$mongo --eval 'try { rs.initiate({ _id: "coupon-db-rs", version: 1, members: [{ _id: 0, host: "coupon-db:27017" }] }) } catch (e) { if (!e.message.includes("already initialized")) throw e }'
+        retry "$$mongo --eval 'rs.status().myState === 1' | grep true >/dev/null" 'error: replica set primary was not ready in time'
+        $$mongo --eval 'try { db.getSiblingDB("admin").createUser({ user: "admin", pwd: "admin", roles: [{ role: "root", db: "admin" }] }) } catch (e) { if (!e.message.includes("already exists")) throw e }'
