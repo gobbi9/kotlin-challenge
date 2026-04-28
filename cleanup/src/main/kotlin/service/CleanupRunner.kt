@@ -11,9 +11,9 @@ import kotlin.concurrent.atomics.ExperimentalAtomicApi
 @OptIn(ExperimentalAtomicApi::class)
 class CleanupRunner(
     private vararg val cleanupRunners: CollectionCleanupRunner,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) {
     private val logger = KotlinLogging.logger { }
-    private val scope = CoroutineScope(Dispatchers.Default)
 
     private var job: Job? = null
 

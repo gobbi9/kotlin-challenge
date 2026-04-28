@@ -6,6 +6,7 @@ val logbackVersion: String by project
 val logstashVersion: String by project
 val kotestVersion: String by project
 val mockkVersion: String by project
+val kotlinxCoroutinesTestVersion: String by project
 val ktlintVersion: String by project
 val sonarqubeVersion: String by project
 val koinVersion: String by project
@@ -102,6 +103,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-property:$kotestVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesTestVersion")
     // Koin tests:
     testImplementation("io.insert-koin:koin-test:$koinVersion")
     testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")

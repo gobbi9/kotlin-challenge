@@ -6,9 +6,11 @@ import io.mockk.mockk
 import it.schwarz.coupon.cleanup.repository.DocumentRepository
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import it.schwarz.coupon.cleanup.service.CollectionCleanupRunner
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.bson.conversions.Bson
 import kotlin.test.assertFalse
 import kotlin.time.Duration
@@ -21,27 +23,30 @@ class CollectionCleanupRunnerTest :
     StringSpec({
 
         "test do cleanup" {
-            val runners =
-                listOf(
-                    TestCouponCleanupRunner(100.milliseconds),
-                    TestCouponCleanupRunner(1.minutes),
-                    TestCouponCleanupRunner(2.hours),
-                    TestCouponCleanupRunner(5.seconds),
-                )
-            val cleanup = CleanupRunner(runners[0], runners[1], runners[2], runners[3])
+            runTest {
+                val runners =
+                    listOf(
+                        TestCouponCleanupRunner(delay = 100.milliseconds, scope = this),
+                        TestCouponCleanupRunner(delay = 1.minutes, scope = this),
+                        TestCouponCleanupRunner(delay = 2.hours, scope = this),
+                        TestCouponCleanupRunner(delay = 5.seconds, scope = this),
+                    )
+                val cleanup = CleanupRunner(cleanupRunners = runners.toTypedArray(), scope = this)
 
-            cleanup.start()
-            // wait to be finished
-            while (cleanup.isRunning()) {
-                delay(50.milliseconds)
+                cleanup.start()
+                // wait to be finished
+                while (cleanup.isRunning()) {
+                    delay(50.milliseconds)
+                }
+
+                runners.forEach { assertFalse(it.isRunning()) }
             }
-
-            runners.forEach { assertFalse(it.isRunning()) }
         }
     }) {
     class TestCouponCleanupRunner(
         val delay: Duration,
-    ) : CollectionCleanupRunner(mockk<DocumentRepository>()) {
+        scope: CoroutineScope,
+    ) : CollectionCleanupRunner(mockk<DocumentRepository>(), scope) {
         private var job: Job? = null
 
         override fun getCollectionName(): String = "test-collection"

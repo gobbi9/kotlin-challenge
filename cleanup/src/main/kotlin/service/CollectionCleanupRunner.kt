@@ -11,9 +11,9 @@ import org.bson.types.ObjectId
 
 abstract class CollectionCleanupRunner(
     private val documentRepository: DocumentRepository,
+    protected val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) {
     private val logger = KotlinLogging.logger { }
-    protected val scope = CoroutineScope(Dispatchers.Default)
 
     abstract fun getCollectionName(): String
 
@@ -23,8 +23,8 @@ abstract class CollectionCleanupRunner(
         const val CREATION_DATE_TIME_FIELD_NAME = "creationDateTime"
     }
 
-    open fun doCleanup(): Job {
-        return scope.launch {
+    open fun doCleanup(): Job =
+        scope.launch {
             val ids = getDocuments()
             logger.info { "Starting cleanup for ${ids.size} documents" }
             val batches = ids.chunked(1000)
@@ -40,7 +40,6 @@ abstract class CollectionCleanupRunner(
 
             logger.info { "Cleanup up finished for ${getCollectionName()}" }
         }
-    }
 
     private suspend fun getDocuments(): List<ObjectId> =
         documentRepository.findIdsByCreationDateTimeLessThan(

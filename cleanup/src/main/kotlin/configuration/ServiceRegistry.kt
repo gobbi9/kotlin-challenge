@@ -51,12 +51,14 @@ fun Application.configureKoin() {
                         documentRepository = get<DocumentRepository>(),
                         currentTime = currentTime,
                         retentionMinutes = System.getenv("COUPON_RETENTION_MINUTES").toLong(),
+                        scope = get<CoroutineScope>(),
                     )
                 }
 
                 single {
                     CleanupRunner(
                         get<CouponCleanupRunner>(),
+                        scope = get<CoroutineScope>(),
                     )
                 }
             }
