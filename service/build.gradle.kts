@@ -1,31 +1,11 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
-val ktorVersion: String by project
-val kotlinVersion: String by project
-val logbackVersion: String by project
-val logstashVersion: String by project
-val kotestVersion: String by project
-val mockkVersion: String by project
-val ktlintVersion: String by project
-val sonarqubeVersion: String by project
-val koinVersion: String by project
-val kotlinxDatetimeVersion: String by project
-val julToSlfjVersion: String by project
-val jsonKotlinSchemaVersion: String by project
-val kotlinLoggingVersion: String by project
-val mongoVersion: String by project
-
 plugins {
-    kotlin("jvm")
-    id("io.ktor.plugin")
-    id("org.jlleitschuh.gradle.ktlint")
-    id("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sonarqube)
     jacoco
-    id("org.sonarqube")
 }
-
-group = "schwarz.it"
-version = "0.0.1"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -34,127 +14,68 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-kotlin { }
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
-    }
-}
-
 ktor {
     fatJar {
-        archiveFileName.set("app.jar")
+        archiveFileName.set("service.jar")
     }
-}
-
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
 }
 
 dependencies {
     // KTOR
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-cors:$ktorVersion")
-    implementation("io.ktor:ktor-server-openapi:$ktorVersion")
-    implementation("io.ktor:ktor-server-swagger:$ktorVersion")
-    implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging-jvm:$ktorVersion")
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.openapi)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.default.headers)
+    implementation(libs.ktor.server.call.logging)
 
     // Logging
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
-    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+    implementation(libs.logback.classic)
+    implementation(libs.logstash.logback.encoder)
+    implementation(libs.kotlin.logging)
 
     // Serialization:
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.content.negotiation)
 
     // Koin:
-    implementation("io.insert-koin:koin-ktor:$koinVersion")
-    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger.slf4j)
 
     // Mongo DB
-    implementation("org.mongodb:mongodb-driver-kotlin-sync:$mongoVersion")
-    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:$mongoVersion")
-    implementation("org.mongodb:bson:$mongoVersion")
-    implementation("org.mongodb:bson-kotlinx:$mongoVersion")
+    implementation(libs.mongodb.driver.kotlin.sync)
+    implementation(libs.mongodb.driver.kotlin.coroutine)
+    implementation(libs.mongodb.bson)
+    implementation(libs.mongodb.bson.kotlinx)
 
     // Bridge from java jul logging to slf (logback) logging:
-    implementation("org.slf4j:jul-to-slf4j:$julToSlfjVersion")
+    implementation(libs.jul.to.slf4j)
 
     // Json schema validation:
-    implementation("net.pwall.json:json-kotlin-schema:$jsonKotlinSchemaVersion")
+    implementation(libs.json.kotlin.schema)
 
     // Http client
-    implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-auth:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation(libs.ktor.client.core.jvm)
+    implementation(libs.ktor.client.cio.jvm)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
 
     // Unit Testing & Mocking
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("io.kotest:kotest-property:$kotestVersion")
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
     // Koin tests:
-    testImplementation("io.insert-koin:koin-test:$koinVersion")
-    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
     // Mock for client requests
-    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
+    testImplementation(libs.ktor.client.mock)
 }
 
-jacoco {
-    reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco/"))
-}
-
-with(tasks) {
-    test {
-        useJUnitPlatform()
-        finalizedBy(jacocoTestReport)
-    }
-
-    jacocoTestReport {
-        dependsOn(test)
-        reports {
-            xml.required.set(true)
-            csv.required.set(false)
-            html.required.set(true)
-            xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/report.xml"))
-            html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/html"))
-        }
-    }
-}
-
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    version.set(ktlintVersion)
-    verbose.set(true)
-    outputToConsole.set(true)
-    coloredOutput.set(true)
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-    }
-    filter {
-        exclude("**/generated/**")
-        exclude("**/style-violations.kt")
-        include("**/kotlin/**")
-    }
-}
-
-sonarqube {
-    val exclusions =
-        listOf(
-            "**/src/main/kotlin/FileToExclude.kt",
-        )
-    val cpd = "**/src/main/kotlin/core/domain/*.kt"
-    properties {
-        property("sonar.coverage.exclusions", exclusions)
-        property("sonar.cpd.exclusions", cpd)
-        property("sonar.projectName", "kotlin-ktor")
-    }
+tasks.register("prepareKotlinBuildScriptModel") {
+    // Dummy task for IDE
 }
