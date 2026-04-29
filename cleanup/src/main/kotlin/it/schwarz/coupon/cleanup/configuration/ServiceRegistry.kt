@@ -11,6 +11,7 @@ import it.schwarz.coupon.cleanup.repository.DefaultDocumentRepository
 import it.schwarz.coupon.cleanup.repository.DocumentRepository
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import it.schwarz.coupon.cleanup.service.CouponCleanupRunner
+import it.schwarz.coupon.configuration.Database
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
@@ -62,6 +63,7 @@ fun Application.configureKoin() {
                 single {
                     CleanupRunnerJob(
                         cleanupRunners = getAll<CleanupRunner>(),
+                        application = this@configureKoin,
                     )
                 }
             }

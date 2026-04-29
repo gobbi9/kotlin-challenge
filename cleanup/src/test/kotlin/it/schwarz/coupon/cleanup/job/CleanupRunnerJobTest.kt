@@ -1,6 +1,7 @@
 package it.schwarz.coupon.cleanup.job
 
 import io.kotest.core.spec.style.StringSpec
+import io.ktor.server.application.Application
 import io.mockk.coVerify
 import io.mockk.mockk
 import it.schwarz.coupon.cleanup.service.CleanupRunner
@@ -23,23 +24,27 @@ class CleanupRunnerJobTest : StringSpec({
                 TestCleanupRunner(delay = 2.hours),
                 TestCleanupRunner(delay = 5.seconds),
             )
-            val cleanup = CleanupRunnerJob(cleanupRunners = runners)
+            val application = mockk<Application>(relaxed = true)
+            val cleanup = CleanupRunnerJob(cleanupRunners = runners, application = application)
 
             cleanup.start()
 
             runners.forEach { assertFalse(it.isRunning()) }
+            coVerify(exactly = 1) { application.engine }
         }
     }
 
     "Cleanup runner job should start all runners" {
         val runner1 = mockk<CleanupRunner>(relaxed = true)
         val runner2 = mockk<CleanupRunner>(relaxed = true)
-        val cleanupJob = CleanupRunnerJob(listOf(runner1, runner2))
+        val application = mockk<Application>(relaxed = true)
+        val cleanupJob = CleanupRunnerJob(listOf(runner1, runner2), application)
 
         cleanupJob.start()
 
         coVerify(exactly = 1) { runner1.doCleanup() }
         coVerify(exactly = 1) { runner2.doCleanup() }
+        coVerify(exactly = 1) { application.engine }
     }
 })
 

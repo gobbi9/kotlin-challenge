@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.mongodb.bson)
     implementation(libs.mongodb.bson.kotlinx)
 
+    implementation(project(":configuration"))
+
     // Bridge from java jul logging to slf (logback) logging:
     implementation(libs.jul.to.slf4j)
 
