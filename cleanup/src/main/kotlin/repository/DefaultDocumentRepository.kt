@@ -8,7 +8,7 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
 
-class DocumentRepositoryImpl(
+class DefaultDocumentRepository(
     private val mongoDatabase: MongoDatabase,
 ) : DocumentRepository {
     override suspend fun findIdsByCreationDateTimeLessThan(

@@ -5,8 +5,10 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationEnvironment
 import io.ktor.server.application.install
 import io.ktor.server.config.ApplicationConfig
+import it.schwarz.coupon.cleanup.cleaner.CollectionCleaner
+import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
+import it.schwarz.coupon.cleanup.repository.DefaultDocumentRepository
 import it.schwarz.coupon.cleanup.repository.DocumentRepository
-import it.schwarz.coupon.cleanup.repository.DocumentRepositoryImpl
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import it.schwarz.coupon.cleanup.service.CouponCleanupRunner
 import org.koin.dsl.bind
@@ -37,23 +39,29 @@ fun Application.configureKoin() {
                 val mongoDatabase = Database().configureDatabase(uri, name)
 
                 single<DocumentRepository> {
-                    DocumentRepositoryImpl(
+                    DefaultDocumentRepository(
                         mongoDatabase,
                     )
                 }
 
-                val currentTime = Instant.now()
                 single {
-                    CouponCleanupRunner(
+                    CollectionCleaner(
                         documentRepository = get<DocumentRepository>(),
+                    )
+                }
+
+                val currentTime = Instant.now()
+                single<CleanupRunner> {
+                    CouponCleanupRunner(
+                        collectionCleaner = get<CollectionCleaner>(),
                         currentTime = currentTime,
                         retentionMinutes = System.getenv("COUPON_RETENTION_MINUTES").toLong(),
                     )
                 }
 
                 single {
-                    CleanupRunner(
-                        get<CouponCleanupRunner>(),
+                    CleanupRunnerJob(
+                        cleanupRunners = getAll<CleanupRunner>(),
                     )
                 }
             }

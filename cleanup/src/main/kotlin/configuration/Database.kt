@@ -4,7 +4,6 @@ import com.mongodb.MongoClientSettings
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.opentelemetry.instrumentation.mongo.v3_1.MongoTelemetry
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.bson.codecs.configuration.CodecRegistries
