@@ -4,6 +4,7 @@ import com.mongodb.MongoClientSettings
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.opentelemetry.instrumentation.mongo.v3_1.MongoTelemetry
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.bson.codecs.configuration.CodecRegistries
@@ -20,10 +21,13 @@ class Database {
             CodecRegistries.fromCodecs(LocalDateCodec()),
         )
 
-        val client = MongoClient.create(dbURI)
-        val database = client
-            .getDatabase(dbName)
-            .withCodecRegistry(codecRegistry)
+        val settings = MongoClientSettings.builder()
+            .applyConnectionString(com.mongodb.ConnectionString(dbURI))
+            .codecRegistry(codecRegistry)
+            .build()
+
+        val client = MongoClient.create(settings)
+        val database = client.getDatabase(dbName)
 
         runBlocking {
             val doc = database.runCommand(Document("ping", 1))

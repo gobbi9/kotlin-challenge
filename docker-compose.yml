@@ -12,6 +12,7 @@ services:
       - cleanup/local.env
     environment:
       MONGODB_URI: mongodb://admin:admin@coupon-db:27017/?authSource=admin&replicaSet=coupon-db-rs
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     ports:
       - "8083:8083"
 
@@ -51,3 +52,14 @@ services:
         $$mongo --eval 'try { rs.initiate({ _id: "coupon-db-rs", version: 1, members: [{ _id: 0, host: "coupon-db:27017" }] }) } catch (e) { if (!e.message.includes("already initialized")) throw e }'
         retry "$$mongo --eval 'rs.status().myState === 1' | grep true >/dev/null" 'error: replica set primary was not ready in time'
         $$mongo --eval 'try { db.getSiblingDB("admin").createUser({ user: "admin", pwd: "admin", roles: [{ role: "root", db: "admin" }] }) } catch (e) { if (!e.message.includes("already exists")) throw e }'
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.60
+    container_name: jaeger
+    restart: unless-stopped
+    ports:
+      - "16686:16686" # UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true

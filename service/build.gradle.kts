@@ -52,6 +52,14 @@ dependencies {
     // Bridge from java jul logging to slf (logback) logging:
     implementation(libs.jul.to.slf4j)
 
+    // Tracing
+    implementation(platform(libs.opentelemetry.bom))
+    implementation(libs.opentelemetry.api)
+    implementation(libs.opentelemetry.sdk)
+    implementation(libs.opentelemetry.exporter.otlp)
+    implementation(libs.opentelemetry.instrumentation.mongo)
+    implementation(libs.opentelemetry.extension.kotlin)
+
     // Json schema validation:
     implementation(libs.json.kotlin.schema)
 

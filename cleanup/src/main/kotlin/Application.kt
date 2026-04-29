@@ -6,8 +6,6 @@ import io.ktor.server.application.ApplicationStarted
 import io.ktor.server.application.ApplicationStopped
 import it.schwarz.coupon.cleanup.configuration.configureKoin
 import it.schwarz.coupon.cleanup.service.CleanupRunner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.ktor.ext.get
 import kotlin.system.exitProcess
@@ -29,14 +27,8 @@ fun Application.module() {
             log.info { "Application started" }
 
             val cleanupRunner = get<CleanupRunner>()
-            cleanupRunner.start()
-            get<CoroutineScope>().launch {
-                while (cleanupRunner.isRunning()) {
-                    delay(duration = 5.seconds)
-                }
-
-                log.info { "CleanupRunner is finished. Stopping application." }
-                exitProcess(status = 0)
+            launch {
+                cleanupRunner.start()
             }
         }
         subscribe(ApplicationStopped) {

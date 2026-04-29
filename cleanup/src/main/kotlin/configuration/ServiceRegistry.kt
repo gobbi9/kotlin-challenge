@@ -9,8 +9,6 @@ import it.schwarz.coupon.cleanup.repository.DocumentRepository
 import it.schwarz.coupon.cleanup.repository.DocumentRepositoryImpl
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import it.schwarz.coupon.cleanup.service.CouponCleanupRunner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
@@ -30,7 +28,6 @@ fun Application.configureKoin() {
 
         val appModule =
             module(createdAtStart = true) {
-                single { CoroutineScope(Dispatchers.Default) }.bind(CoroutineScope::class)
                 single { environment }.bind(ApplicationEnvironment::class)
                 single { environment.config }.bind(ApplicationConfig::class)
 
@@ -51,14 +48,12 @@ fun Application.configureKoin() {
                         documentRepository = get<DocumentRepository>(),
                         currentTime = currentTime,
                         retentionMinutes = System.getenv("COUPON_RETENTION_MINUTES").toLong(),
-                        scope = get<CoroutineScope>(),
                     )
                 }
 
                 single {
                     CleanupRunner(
                         get<CouponCleanupRunner>(),
-                        scope = get<CoroutineScope>(),
                     )
                 }
             }

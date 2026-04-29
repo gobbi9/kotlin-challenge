@@ -1,31 +1,40 @@
 package it.schwarz.coupon.cleanup.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
+import io.opentelemetry.instrumentation.annotations.WithSpan
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
+import kotlin.time.Duration.Companion.milliseconds
 
 private val log = KotlinLogging.logger { }
 
 class CleanupRunner(
     private vararg val cleanupRunners: CollectionCleanupRunner,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) {
-    private var job: Job? = null
+    private var running: Boolean = false
 
-    fun start() {
-        if (isRunning()) {
+    /**
+     * Delay before exitProcess(0) in CleanupRunner.start()
+     * to allow graceful termination of background event executors and prevent RejectedExecutionException.
+     */
+    @WithSpan("cleanup-operation")
+    suspend fun start() {
+        if (running) {
             log.warn { "CleanupRunner is already running!" }
             return
         }
-        job = scope.launch {
-            val jobs = cleanupRunners.map { it.doCleanup() }
-            jobs.joinAll()
-        }
+        running = true
         log.info { "CleanupRunner started" }
+        coroutineScope {
+            cleanupRunners.forEach { runner ->
+                launch { runner.doCleanup() }
+            }
+        }
+        running = false
+        log.info { "CleanupRunner is finished. Stopping application after 100ms." }
+        delay(duration = 100.milliseconds)
+        exitProcess(status = 0)
     }
-
-    fun isRunning(): Boolean = job?.isActive == true
 }

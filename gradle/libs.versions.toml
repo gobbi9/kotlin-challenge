@@ -14,6 +14,9 @@ kotlinxCoroutinesTestVersion = "1.10.1"
 ktlintVersion = "1.8.0"
 sonarqubeVersion = "7.2.3.7755"
 ktlintPluginVersion = "14.2.0"
+openTelemetryVersion = "1.47.0"
+openTelemetryInstrumentationVersion = "2.13.0-alpha"
+openTelemetryInstrumentationAnnotationsVersion = "2.13.0"
 
 [libraries]
 # KTOR
@@ -70,6 +73,16 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinVersion" }
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koinVersion" }
 # Mock for client requests
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorVersion" }
+
+# Tracing
+opentelemetry-bom = { module = "io.opentelemetry:opentelemetry-bom", version.ref = "openTelemetryVersion" }
+opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api" }
+opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk" }
+opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
+opentelemetry-instrumentation-mongo = { module = "io.opentelemetry.instrumentation:opentelemetry-mongo-3.1", version.ref = "openTelemetryInstrumentationVersion" }
+opentelemetry-extension-kotlin = { module = "io.opentelemetry:opentelemetry-extension-kotlin" }
+opentelemetry-instrumentation-logback = { module = "io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0", version.ref = "openTelemetryInstrumentationVersion" }
+opentelemetry-instrumentation-annotations = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations", version.ref = "openTelemetryInstrumentationAnnotationsVersion" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
