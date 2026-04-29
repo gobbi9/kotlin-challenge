@@ -18,6 +18,7 @@ ktlintPluginVersion = "14.2.0"
 openTelemetryVersion = "1.47.0"
 openTelemetryInstrumentationVersion = "2.13.0-alpha"
 openTelemetryInstrumentationAnnotationsVersion = "2.13.0"
+kotlinxSerializationVersion = "1.8.0"
 
 [libraries]
 # KTOR
@@ -35,6 +36,7 @@ logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-enc
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLoggingVersion" }
 
 # Serialization:
+kotlinx-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktorVersion" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktorVersion" }
 
