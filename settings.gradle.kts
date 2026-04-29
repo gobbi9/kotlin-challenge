@@ -1,4 +1,5 @@
 rootProject.name = "coupon-kotlin"
 
 include("cleanup")
-include("service")
+include("api")
+project(":api").projectDir = file("service")

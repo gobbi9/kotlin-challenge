@@ -10,7 +10,7 @@ plugins {
 }
 
 allprojects {
-    group = "schwarz.it"
+    group = "it.schwarz"
     version = "0.0.1"
 
     repositories {

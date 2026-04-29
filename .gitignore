@@ -592,3 +592,6 @@ FodyWeavers.xsd
 application-nps-local-overwrite.yml
 .idea
 build
+
+# MacOS
+.DS_Store
