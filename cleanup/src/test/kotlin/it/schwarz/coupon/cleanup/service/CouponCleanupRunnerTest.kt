@@ -4,13 +4,13 @@ import io.kotest.core.spec.style.StringSpec
 import io.mockk.coVerify
 import io.mockk.mockk
 import it.schwarz.coupon.cleanup.cleaner.CollectionCleaner
-import java.time.Instant
+import java.time.LocalDateTime
 
 class CouponCleanupRunnerTest : StringSpec({
 
     "CouponCleanupRunner should call collectionCleaner with correct filter" {
         val collectionCleaner = mockk<CollectionCleaner>(relaxed = true)
-        val currentTime = Instant.parse("2023-01-01T12:00:00Z")
+        val currentTime = LocalDateTime.parse("2023-01-01T12:00:00")
         val retentionMinutes = 60L
         val runner = CouponCleanupRunner(collectionCleaner, currentTime, retentionMinutes)
 

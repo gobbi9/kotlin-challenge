@@ -52,6 +52,7 @@ subprojects {
 
             tasks.withType<Test> {
                 useJUnitPlatform()
+                jvmArgs("-Xshare:off")
                 finalizedBy(tasks.withType<JacocoReport>())
             }
 

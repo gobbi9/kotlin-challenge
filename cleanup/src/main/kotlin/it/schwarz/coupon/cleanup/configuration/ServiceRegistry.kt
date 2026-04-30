@@ -1,10 +1,11 @@
 package it.schwarz.coupon.cleanup.configuration
 
+import com.mongodb.kotlin.client.coroutine.MongoClient
+import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationEnvironment
 import io.ktor.server.application.install
-import io.ktor.server.config.ApplicationConfig
 import it.schwarz.coupon.cleanup.cleaner.CollectionCleaner
 import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
 import it.schwarz.coupon.cleanup.repository.DefaultDocumentRepository
@@ -19,7 +20,7 @@ import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopPreparing
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
-import java.time.Instant
+import java.time.LocalDateTime
 
 private val log = KotlinLogging.logger {}
 
@@ -28,20 +29,30 @@ fun Application.configureKoin() {
 
     install(Koin) {
         slf4jLogger()
+        allowOverride(true)
 
         val appModule =
             module(createdAtStart = true) {
                 single { environment }.bind(ApplicationEnvironment::class)
-                single { environment.config }.bind(ApplicationConfig::class)
 
-                val uri = requireNotNull(System.getenv("MONGODB_URI")) { "database URI not configured" }
-                val name = requireNotNull(System.getenv("DATABASE_NAME")) { "database name not configured" }
+                val uri = System.getProperty("MONGODB_URI")
+                    ?: System.getenv("MONGODB_URI")
+                val name = System.getProperty("DATABASE_NAME")
+                    ?: System.getenv("DATABASE_NAME")
 
-                val mongoDatabase = Database().configureDatabase(uri, name)
+                single<MongoClient> {
+                    requireNotNull(uri) { "database URI not configured" }
+                    Database().configureDatabase(uri)
+                }
+
+                single<MongoDatabase> {
+                    requireNotNull(name) { "database name not configured" }
+                    get<MongoClient>().getDatabase(name)
+                }
 
                 single<DocumentRepository> {
                     DefaultDocumentRepository(
-                        mongoDatabase,
+                        get<MongoDatabase>(),
                     )
                 }
 
@@ -51,12 +62,16 @@ fun Application.configureKoin() {
                     )
                 }
 
-                val currentTime = Instant.now()
+                val retentionMinutes = System.getProperty("COUPON_RETENTION_MINUTES")?.toLong()
+                    ?: System.getenv("COUPON_RETENTION_MINUTES")?.toLong()
+                    ?: 60L
+
+                val currentTime = LocalDateTime.now()
                 single<CleanupRunner> {
                     CouponCleanupRunner(
                         collectionCleaner = get<CollectionCleaner>(),
                         currentTime = currentTime,
-                        retentionMinutes = System.getenv("COUPON_RETENTION_MINUTES").toLong(),
+                        retentionMinutes = retentionMinutes,
                     )
                 }
 

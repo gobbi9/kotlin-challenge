@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.mongodb.bson.kotlinx)
 
     implementation(project(":configuration"))
+    testImplementation(testFixtures(project(":configuration")))
 
     // Bridge from java jul logging to slf (logback) logging:
     implementation(libs.jul.to.slf4j)
@@ -77,6 +78,11 @@ dependencies {
     implementation(libs.ktor.client.cio)
 
     // Unit Testing & Mocking
+    testImplementation(libs.testcontainers.mongodb)
+    testImplementation(libs.testcontainers.core)
+    testImplementation(libs.kotest.extensions.testcontainers)
+    testImplementation(project(":db-migrations"))
+    testImplementation(project(":model"))
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
@@ -85,6 +91,8 @@ dependencies {
     // Koin tests:
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.test.junit4)
+    // Ktor test
+    testImplementation(libs.ktor.server.test.host)
     // Mock for client requests
     testImplementation(libs.ktor.client.mock)
 }

@@ -5,9 +5,7 @@ import io.ktor.server.application.Application
 import io.opentelemetry.instrumentation.annotations.WithSpan
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 private val log = KotlinLogging.logger { }
 
@@ -27,15 +25,16 @@ class CleanupRunnerJob(
     @WithSpan("cleanup-operation")
     suspend fun start() {
         log.info { "Cleanup runner job started" }
+        log.info { "Number of runners to execute: ${cleanupRunners.size}" }
         coroutineScope {
             cleanupRunners.forEach { runner ->
+                log.debug { "Launching runner: ${runner::class.simpleName}" }
                 launch { runner.doCleanup() }
             }
         }
         log.info { "Cleanup runner job is finished. Stopping application in 1 second." }
         coroutineScope {
             launch {
-                delay(duration = 1.seconds) // avoid RejectedExecutionException in logs
                 application.engine.stop(gracePeriodMillis = 1000, timeoutMillis = 5000)
             }
         }

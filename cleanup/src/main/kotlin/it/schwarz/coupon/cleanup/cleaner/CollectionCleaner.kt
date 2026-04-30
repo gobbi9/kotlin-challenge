@@ -20,7 +20,7 @@ class CollectionCleaner(
         filter: Bson,
     ) {
         val ids = getDocuments(collectionName, filter)
-        log.info { "Starting cleanup for ${ids.size} documents" }
+        log.info { "Starting cleanup for ${ids.size} documents in $collectionName. Filter: $filter" }
         val batches = ids.chunked(DEFAULT_BATCH_SIZE)
 
         log.info { "Cleaning up ${ids.size} documents in $collectionName" }

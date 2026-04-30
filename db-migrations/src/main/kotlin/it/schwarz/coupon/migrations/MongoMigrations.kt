@@ -37,7 +37,8 @@ object MongoMigrations {
 
     fun run(mongodbUri: String, databaseName: String, databaseProvider: () -> Database = { Database() }) {
         log.info { "Starting MongoDB migrations for database: $databaseName" }
-        val db = databaseProvider().configureDatabase(mongodbUri, databaseName)
+        val client = databaseProvider().configureDatabase(mongodbUri)
+        val db = client.getDatabase(databaseName)
 
         runBlocking {
             val collection = db.getCollection<Document>(MIGRATIONS_COLLECTION)

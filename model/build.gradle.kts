@@ -8,7 +8,7 @@ plugins {
 dependencies {
     implementation(libs.mongodb.bson)
     implementation(libs.mongodb.bson.kotlinx)
-    implementation(libs.kotlinx.json)
+    api(libs.kotlinx.json)
 
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
