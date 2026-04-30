@@ -16,6 +16,20 @@ services:
     ports:
       - "8083:8083"
 
+  cleanup-scheduler:
+    image: mcuadros/ofelia:latest
+    container_name: coupon-cleanup-scheduler
+    depends_on:
+      - cleanup
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-run.cleanup.schedule: "${CLEANUP_CRON:-0 30 * * * *}"
+      ofelia.job-run.cleanup.container: "coupon-cleanup"
+    restart: unless-stopped
+
   coupon-db:
     image: mongo:8.2.7
     restart: unless-stopped
