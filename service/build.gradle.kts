@@ -38,6 +38,7 @@ dependencies {
     // Serialization:
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.status.pages)
 
     // Koin:
     implementation(libs.koin.ktor)
@@ -60,6 +61,11 @@ dependencies {
     implementation(libs.opentelemetry.instrumentation.mongo)
     implementation(libs.opentelemetry.extension.kotlin)
 
+    implementation(libs.opentelemetry.instrumentation.annotations)
+    implementation(project(":model"))
+    implementation(project(":configuration"))
+    testImplementation(testFixtures(project(":configuration")))
+
     // Json schema validation:
     implementation(libs.json.kotlin.schema)
 
@@ -77,9 +83,15 @@ dependencies {
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.property)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.testcontainers.mongodb)
+    testImplementation(libs.testcontainers.core)
+    testImplementation(libs.kotest.extensions.testcontainers)
     // Koin tests:
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.test.junit4)
+    // Ktor test
+    testImplementation(libs.ktor.server.test.host)
     // Mock for client requests
     testImplementation(libs.ktor.client.mock)
 }

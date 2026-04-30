@@ -63,4 +63,31 @@ class CouponMapperTest : StringSpec({
         entity.creationDateTime shouldBe creationDateTime
         entity.updateDateTime shouldBe updateDateTime
     }
+
+    "toCouponListDto should map list of DTOs to CouponListDto" {
+        val dtos = listOf(
+            CouponDto(code = "C1", discount = BigDecimal.ONE, description = "D1"),
+            CouponDto(code = "C2", discount = BigDecimal.TEN, description = "D2"),
+        )
+        val page = 1
+        val pageSize = 10
+        val totalCount = 100L
+
+        val result = dtos.toCouponListDto(page = page, pageSize = pageSize, totalCount = totalCount)
+
+        result.coupons shouldBe dtos
+        result.page shouldBe page
+        result.pageSize shouldBe pageSize
+        result.totalCount shouldBe totalCount
+    }
+
+    "toCouponListDto should use list size as default totalCount" {
+        val dtos = listOf(
+            CouponDto(code = "C1", discount = BigDecimal.ONE, description = "D1"),
+        )
+
+        val result = dtos.toCouponListDto(page = 0, pageSize = 100)
+
+        result.totalCount shouldBe 1L
+    }
 })

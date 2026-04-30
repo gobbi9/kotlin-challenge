@@ -16,11 +16,11 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
 
-class DefaultDocumentRepositoryTest : StringSpec({
+class DocumentRepositoryTest : StringSpec({
 
-    "DefaultDocumentRepository findIdsByCreationDateTimeLessThan should return list of ObjectIds" {
+    "DocumentRepository findIdsByCreationDateTimeLessThan should return list of ObjectIds" {
         val mongoDatabase = mockk<MongoDatabase>()
-        val repository = DefaultDocumentRepository(mongoDatabase)
+        val repository = DocumentRepository(mongoDatabase)
         val collectionName = "testCollection"
         val filter = mockk<Bson>()
         val mockCollection = mockk<MongoCollection<Document>>()
@@ -44,9 +44,9 @@ class DefaultDocumentRepositoryTest : StringSpec({
         result shouldBe listOf(id1, id2)
     }
 
-    "DefaultDocumentRepository deleteByIds should return deleted count" {
+    "DocumentRepository deleteByIds should return deleted count" {
         val mongoDatabase = mockk<MongoDatabase>()
-        val repository = DefaultDocumentRepository(mongoDatabase)
+        val repository = DocumentRepository(mongoDatabase)
         val collectionName = "testCollection"
         val ids = listOf(ObjectId(), ObjectId())
         val mockCollection = mockk<MongoCollection<Document>>()

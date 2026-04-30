@@ -1,4 +1,20 @@
 services:
+  coupon-service:
+    build:
+      context: .
+      dockerfile: service/Dockerfile
+    container_name: coupon-service
+    depends_on:
+      db-migrations:
+        condition: service_completed_successfully
+    env_file:
+      - service/local.env
+    environment:
+      MONGODB_URI: mongodb://admin:admin@coupon-db:27017/?authSource=admin&replicaSet=coupon-db-rs
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
+    ports:
+      - "8082:8082"
+
   cleanup:
     restart: "no"
     container_name: coupon-cleanup
