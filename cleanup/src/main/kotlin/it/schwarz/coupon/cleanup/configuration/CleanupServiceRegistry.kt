@@ -8,7 +8,7 @@ import io.ktor.server.application.ApplicationEnvironment
 import io.ktor.server.application.install
 import it.schwarz.coupon.cleanup.cleaner.CollectionCleaner
 import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
-import it.schwarz.coupon.cleanup.repository.DocumentRepository
+import it.schwarz.coupon.cleanup.repository.CleanupCouponRepository
 import it.schwarz.coupon.cleanup.service.CleanupRunner
 import it.schwarz.coupon.cleanup.service.CouponCleanupRunner
 import it.schwarz.coupon.configuration.Database
@@ -50,14 +50,14 @@ fun Application.configureKoin() {
                 }
 
                 single {
-                    DocumentRepository(
+                    CleanupCouponRepository(
                         get<MongoDatabase>(),
                     )
                 }
 
                 single {
                     CollectionCleaner(
-                        documentRepository = get<DocumentRepository>(),
+                        cleanupCouponRepository = get<CleanupCouponRepository>(),
                     )
                 }
 

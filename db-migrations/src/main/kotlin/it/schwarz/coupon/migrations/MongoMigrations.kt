@@ -5,10 +5,12 @@ import com.mongodb.client.model.Indexes
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.github.oshai.kotlinlogging.KotlinLogging
 import it.schwarz.coupon.configuration.Database
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 private val log = KotlinLogging.logger {}
 
@@ -33,6 +35,19 @@ object MongoMigrations {
                 )
             },
         ),
+        Migration(
+            id = "002-create-coupons-ttl-index",
+            description = "Create TTL index on coupons.creationDateTime",
+            action = { db ->
+                val collection = db.getCollection<Document>("coupons")
+                // 3 minutes as per local.env, but we can make it configurable or fixed for the index
+                // MongoDB TTL index checks every minute.
+                collection.createIndex(
+                    Indexes.ascending("creationDateTime"),
+                    IndexOptions().expireAfter(3L, TimeUnit.MINUTES).name("idx_coupons_creation_ttl"),
+                )
+            },
+        ),
     )
 
     fun run(mongodbUri: String, databaseName: String, databaseProvider: () -> Database = { Database() }) {
@@ -43,7 +58,7 @@ object MongoMigrations {
         runBlocking {
             val collection = db.getCollection<Document>(MIGRATIONS_COLLECTION)
 
-            val appliedMigrations = collection.find().toList()
+            val appliedMigrations = collection.find()
                 .map { it.getString("id") }
                 .toSet()
 
