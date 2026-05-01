@@ -3,6 +3,7 @@ package it.schwarz.coupon.cleanup.job
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.get
+import io.ktor.server.application.ServerReady
 import io.ktor.server.testing.testApplication
 import it.schwarz.coupon.cleanup.module
 import it.schwarz.coupon.configuration.MongoDatabaseTestcontainer
@@ -18,6 +19,7 @@ import kotlin.time.Duration.Companion.seconds
 class CleanupRunnerJobIntegrationTest : StringSpec({
     val mongoDatabaseTestcontainer = MongoDatabaseTestcontainer(
         databaseName = "coupon-db",
+        additionalProperties = mapOf("COUPON_RETENTION_MINUTES" to "0"),
     )
     extension(mongoDatabaseTestcontainer)
 
@@ -27,7 +29,7 @@ class CleanupRunnerJobIntegrationTest : StringSpec({
         val collection = testDatabase.getCollection<CouponDocument>(collectionName = "coupons")
 
         // 1. Create 10.000 coupons
-        val yesterday = Instant.now().minus(1, ChronoUnit.DAYS)
+        val oneMinuteAgo = Instant.now().minus(1, ChronoUnit.MINUTES)
         val coupons = (1..10_000).map { i ->
             CouponDocument(
                 id = ObjectId(),
@@ -35,8 +37,8 @@ class CleanupRunnerJobIntegrationTest : StringSpec({
                 discount = nextDouble(from = 1.0, until = 100.0).toBigDecimal()
                     .setScale(2, RoundingMode.HALF_UP),
                 description = "Test coupon $i",
-                creationDateTime = yesterday,
-                updateDateTime = yesterday,
+                creationDateTime = oneMinuteAgo,
+                updateDateTime = oneMinuteAgo,
             )
         }
         collection.insertMany(documents = coupons)
@@ -51,6 +53,8 @@ class CleanupRunnerJobIntegrationTest : StringSpec({
 
             // Trigger at least one request to start the application in testApplication
             client.get("/")
+            // Manually trigger ServerReady event because testApplication does not trigger it
+            application.monitor.raise(definition = ServerReady, value = application.environment)
 
             // 2. Wait for it to finish.
             var attempts = 0
