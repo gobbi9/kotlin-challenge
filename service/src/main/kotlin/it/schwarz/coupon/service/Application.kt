@@ -1,6 +1,7 @@
 package it.schwarz.coupon.service
 
 import io.ktor.server.application.Application
+import it.schwarz.coupon.service.configuration.configureMigrations
 import it.schwarz.coupon.service.configuration.configureService
 
 /**
@@ -11,9 +12,10 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 /**
  * Configures the Ktor application module.
  *
- * This function initializes the service by calling [configureService].
+ * This function initializes the service by calling [configureMigrations] and [configureService].
  */
 @Suppress("unused")
 fun Application.module() {
+    configureMigrations()
     configureService()
 }

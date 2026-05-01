@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.opentelemetry.instrumentation.annotations)
     implementation(project(":model"))
     implementation(project(":configuration"))
+    implementation(project(":db-migrations"))
     testImplementation(testFixtures(project(":configuration")))
 
     // Json schema validation:

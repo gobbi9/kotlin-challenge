@@ -5,6 +5,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.application.ServerReady
 import it.schwarz.coupon.cleanup.configuration.configureKoin
+import it.schwarz.coupon.cleanup.configuration.configureMigrations
 import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.get
@@ -27,6 +28,7 @@ private val log = KotlinLogging.logger {}
  */
 @Suppress("unused")
 fun Application.module() {
+    configureMigrations()
     configureKoin()
 
     with(monitor) {

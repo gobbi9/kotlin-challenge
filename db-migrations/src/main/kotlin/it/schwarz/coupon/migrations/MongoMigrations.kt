@@ -72,6 +72,20 @@ object MongoMigrations {
     )
 
     /**
+     * Executes migrations using connection details from system properties or environment variables.
+     */
+    fun runMigrations() {
+        val uri = System.getProperty("MONGODB_URI") ?: System.getenv("MONGODB_URI")
+        val name = System.getProperty("DATABASE_NAME") ?: System.getenv("DATABASE_NAME")
+
+        if (uri != null && name != null) {
+            run(uri, name)
+        } else {
+            log.warn { "MONGODB_URI or DATABASE_NAME not configured, skipping migrations." }
+        }
+    }
+
+    /**
      * Executes all pending migrations against the specified MongoDB database.
      */
     fun run(mongodbUri: String, databaseName: String, databaseProvider: () -> Database = { Database() }) {

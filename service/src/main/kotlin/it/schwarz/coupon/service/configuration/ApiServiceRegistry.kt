@@ -20,6 +20,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import io.opentelemetry.api.trace.Span
 import it.schwarz.coupon.configuration.Database
+import it.schwarz.coupon.migrations.MongoMigrations
 import it.schwarz.coupon.model.mapper.toErrorDto
 import it.schwarz.coupon.model.serialization.couponSerializersModule
 import it.schwarz.coupon.service.repository.CouponRepository
@@ -44,6 +45,13 @@ val serviceJson = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
     explicitNulls = false
+}
+
+/**
+ * Executes MongoDB migrations if the necessary configuration is present.
+ */
+fun Application.configureMigrations() {
+    MongoMigrations.runMigrations()
 }
 
 /**

@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.mongodb.bson.kotlinx)
 
     implementation(project(":configuration"))
+    implementation(project(":db-migrations"))
     testImplementation(testFixtures(project(":configuration")))
 
     // Bridge from java jul logging to slf (logback) logging:
