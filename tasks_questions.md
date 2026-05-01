@@ -4,3 +4,5 @@
     - Functionality/behavior should be the same as in Java but not the exact code
     - Feel free to use the attached openapi file
 3. Add tests were they make sense
+
+Gobbi: see [readme.md](readme.md) for more info.

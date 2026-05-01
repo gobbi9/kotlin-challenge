@@ -23,6 +23,8 @@ import io.opentelemetry.api.trace.Span
 import io.opentelemetry.api.trace.SpanContext
 import it.schwarz.coupon.model.rest.CouponDto
 import it.schwarz.coupon.model.rest.CouponListDto
+import it.schwarz.coupon.service.configuration.configureRequestValidation
+import it.schwarz.coupon.service.configuration.configureStatusPages
 import it.schwarz.coupon.service.configuration.serviceJson
 import it.schwarz.coupon.service.service.CouponService
 import java.math.BigDecimal
@@ -156,6 +158,35 @@ class CouponControllerTest : StringSpec({
             response.status shouldBe HttpStatusCode.NoContent
             response.headers["X-Trace-Id"] shouldBe mockTraceId
             coVerify(exactly = 1) { couponService.saveCoupons(couponDtos = any()) }
+        }
+    }
+
+    "POST /coupons with invalid data should return BadRequest" {
+        val couponService = mockk<CouponService>()
+        val invalidCoupon = CouponDto(code = "", discount = BigDecimal("-1.0"), description = "")
+
+        testApplication {
+            val client = createClient {
+                install(ClientContentNegotiation) {
+                    json(serviceJson)
+                }
+            }
+            application {
+                install(ServerContentNegotiation) {
+                    json(serviceJson)
+                }
+                configureRequestValidation()
+                configureStatusPages()
+                routing {
+                    couponRoutes(couponService)
+                }
+            }
+
+            val response = client.post("/coupons") {
+                contentType(ContentType.Application.Json)
+                setBody(invalidCoupon)
+            }
+            response.status shouldBe HttpStatusCode.BadRequest
         }
     }
 })

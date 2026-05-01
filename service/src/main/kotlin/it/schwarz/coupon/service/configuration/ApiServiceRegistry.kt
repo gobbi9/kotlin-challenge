@@ -12,6 +12,8 @@ import io.ktor.server.application.install
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.plugins.requestvalidation.RequestValidation
+import io.ktor.server.plugins.requestvalidation.RequestValidationException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
@@ -22,6 +24,7 @@ import it.schwarz.coupon.model.serialization.couponSerializersModule
 import it.schwarz.coupon.service.repository.CouponRepository
 import it.schwarz.coupon.service.rest.couponRoutes
 import it.schwarz.coupon.service.service.CouponService
+import it.schwarz.coupon.service.validation.validateCouponDto
 import kotlinx.serialization.json.Json
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -41,6 +44,7 @@ val serviceJson = Json {
 fun Application.configureService() {
     configureKoin()
     configureSerialization()
+    configureRequestValidation()
     configureStatusPages()
     install(plugin = DefaultHeaders)
     configureTraceIdHeader()
@@ -80,8 +84,21 @@ fun Application.configureSerialization() {
     }
 }
 
+fun Application.configureRequestValidation() {
+    install(plugin = RequestValidation) {
+        validateCouponDto()
+    }
+}
+
 fun Application.configureStatusPages() {
     install(plugin = StatusPages) {
+        exception<RequestValidationException> { call, cause ->
+            log.error(throwable = cause) { "Validation Error: ${cause.reasons.joinToString()}" }
+            call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = cause.toErrorDto(fallbackMessage = "Validation failed: ${cause.reasons.joinToString()}"),
+            )
+        }
         exception<CouponService.TooManyCodesException> { call, cause ->
             log.error(throwable = cause) { "Bad Request: ${cause.message}" }
             call.respond(
