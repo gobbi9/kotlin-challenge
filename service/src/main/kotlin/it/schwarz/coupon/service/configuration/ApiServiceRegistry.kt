@@ -15,6 +15,7 @@ import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.RequestValidationException
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.plugins.swagger.swaggerUI
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import io.opentelemetry.api.trace.Span
@@ -124,6 +125,7 @@ fun Application.configureRouting() {
     val couponService by inject<CouponService>()
     routing {
         couponRoutes(couponService)
+        swaggerUI(path = "swagger")
     }
 }
 

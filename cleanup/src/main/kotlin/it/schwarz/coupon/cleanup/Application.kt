@@ -2,11 +2,11 @@ package it.schwarz.coupon.cleanup
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationStarted
 import io.ktor.server.application.ApplicationStopped
+import io.ktor.server.application.ServerReady
 import it.schwarz.coupon.cleanup.configuration.configureKoin
 import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.get
 
 fun main(args: Array<String>) {
@@ -21,11 +21,11 @@ fun Application.module() {
     configureKoin()
 
     with(monitor) {
-        subscribe(ApplicationStarted) {
-            log.info { "Application started" }
+        subscribe(ServerReady) {
+            log.info { "Server is ready to start cleanup runner job" }
 
             val cleanupRunner = get<CleanupRunnerJob>()
-            launch {
+            runBlocking {
                 cleanupRunner.start()
             }
         }

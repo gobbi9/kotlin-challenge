@@ -4,7 +4,8 @@
       <option value="$PROJECT_DIR$/cleanup/local.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="it.schwarz.coupon.cleanup.ApplicationKt" />
-    <module name="cleanup.main" />
+      <module name="it.schwarz.coupon-kotlin.cleanup.main"/>
+      <option name="VM_PARAMETERS" value="-javaagent:$PROJECT_DIR$/opentelemetry-javaagent.jar"/>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="cleanup.*" />
@@ -28,7 +29,7 @@
     <option name="passParentEnvs" value="true" />
     <option name="programParameters" value="" />
     <option name="shortenCommandLine" />
-    <option name="vmParameters" />
+      <option name="vmParameters" value="-javaagent:$PROJECT_DIR$/opentelemetry-javaagent.jar"/>
     <option name="workingDirectory" value="$PROJECT_DIR$" />
     <method v="2">
       <option name="Make" enabled="true" />

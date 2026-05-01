@@ -18,6 +18,10 @@ ktor {
     fatJar {
         archiveFileName.set("service.jar")
     }
+    openApi {
+        enabled = true
+        codeInferenceEnabled = true
+    }
 }
 
 dependencies {

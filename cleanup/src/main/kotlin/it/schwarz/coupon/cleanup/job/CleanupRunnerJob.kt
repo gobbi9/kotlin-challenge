@@ -28,7 +28,7 @@ class CleanupRunnerJob(
             log.debug { "Launching runner: ${runner::class.simpleName}" }
             runner.doCleanup()
         }
-        log.info { "Cleanup runner job is finished. Stopping application in 1 second." }
+        log.info { "Cleanup runner job is finished. Stopping application in a few seconds." }
         application.engine.stop(gracePeriodMillis = 1000, timeoutMillis = 5000)
     }
 }
