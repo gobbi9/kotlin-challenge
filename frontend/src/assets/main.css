@@ -1,0 +1,40 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-color: #f0f2f5;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --border-color: #d1d5db;
+  --accent: #7c3aed;
+  --card-add-bg: rgba(255, 255, 255, 0.6);
+  --card-add-hover-bg: rgba(255, 255, 255, 0.9);
+  --input-bg: #ffffff;
+  --coupon-shadow-hover: rgba(0, 0, 0, 0.3);
+  --coupon-shadow-hover-secondary: rgba(0, 0, 0, 0.2);
+  --coupon-shadow-normal: rgba(0, 0, 0, 0.15);
+}
+
+:root.dark {
+  --bg-color: #0f1117;
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-color: #374151;
+  --accent: #8b5cf6;
+  --card-add-bg: rgba(255, 255, 255, 0.05);
+  --card-add-hover-bg: rgba(255, 255, 255, 0.1);
+  --input-bg: #1f2937;
+  --coupon-shadow-hover: rgba(0, 0, 0, 0.85);
+  --coupon-shadow-hover-secondary: rgba(0, 0, 0, 0.7);
+  --coupon-shadow-normal: rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-color);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}

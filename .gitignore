@@ -595,3 +595,14 @@ build
 
 # MacOS
 .DS_Store
+
+### Node/Vue/TS (frontend) ###
+frontend/node_modules/
+frontend/dist/
+frontend/*.local
+frontend/.eslintcache
+frontend/.stylelintcache
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*

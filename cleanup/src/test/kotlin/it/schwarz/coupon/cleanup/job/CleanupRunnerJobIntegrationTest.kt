@@ -10,14 +10,14 @@ import it.schwarz.coupon.model.mongodb.CouponDocument
 import kotlinx.coroutines.delay
 import org.bson.types.ObjectId
 import java.math.RoundingMode
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.random.Random.Default.nextDouble
 import kotlin.time.Duration.Companion.seconds
 
 class CleanupRunnerJobIntegrationTest : StringSpec({
     val mongoDatabaseTestcontainer = MongoDatabaseTestcontainer(
         databaseName = "coupon-db",
-        additionalProperties = mapOf("COUPON_RETENTION_MINUTES" to "1"),
     )
     extension(mongoDatabaseTestcontainer)
 
@@ -27,7 +27,7 @@ class CleanupRunnerJobIntegrationTest : StringSpec({
         val collection = testDatabase.getCollection<CouponDocument>(collectionName = "coupons")
 
         // 1. Create 10.000 coupons
-        val yesterday = LocalDateTime.now().minusDays(1)
+        val yesterday = Instant.now().minus(1, ChronoUnit.DAYS)
         val coupons = (1..10_000).map { i ->
             CouponDocument(
                 id = ObjectId(),

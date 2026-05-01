@@ -10,9 +10,13 @@ import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
+import org.bson.BsonDateTime
+import org.bson.codecs.kotlinx.BsonEncoder
 import org.bson.types.ObjectId
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 object BigDecimalSerializer : KSerializer<BigDecimal> {
@@ -41,12 +45,40 @@ object ObjectIdSerializer : KSerializer<ObjectId> {
     override fun deserialize(decoder: Decoder): ObjectId = ObjectId(decoder.decodeString())
 }
 
+object InstantSerializer : KSerializer<Instant> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Instant", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Instant) {
+        when (encoder) {
+            is BsonEncoder -> encoder.encodeBsonValue(BsonDateTime(value.toEpochMilli()))
+            else -> encoder.encodeString(value.toString())
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): Instant =
+        when (decoder) {
+            is org.bson.codecs.kotlinx.BsonDecoder -> Instant.ofEpochMilli(decoder.decodeBsonValue().asDateTime().value)
+            else -> Instant.parse(decoder.decodeString())
+        }
+}
+
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: LocalDateTime) =
-        encoder.encodeString(value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+        when (encoder) {
+            is BsonEncoder -> encoder.encodeBsonValue(BsonDateTime(value.toInstant(ZoneOffset.UTC).toEpochMilli()))
+            else -> encoder.encodeString(value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+        }
+    }
 
     override fun deserialize(decoder: Decoder): LocalDateTime =
-        LocalDateTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        when (decoder) {
+            is org.bson.codecs.kotlinx.BsonDecoder ->
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(decoder.decodeBsonValue().asDateTime().value),
+                    ZoneOffset.UTC,
+                )
+            else -> LocalDateTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        }
 }

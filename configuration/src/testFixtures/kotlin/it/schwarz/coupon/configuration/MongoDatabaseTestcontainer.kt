@@ -8,6 +8,7 @@ import io.kotest.core.spec.Spec
 import it.schwarz.coupon.migrations.MongoMigrations
 import it.schwarz.coupon.model.serialization.couponSerializersModule
 import org.bson.codecs.configuration.CodecRegistries
+import org.bson.codecs.jsr310.InstantCodec
 import org.bson.codecs.jsr310.LocalDateCodec
 import org.bson.codecs.jsr310.LocalDateTimeCodec
 import org.bson.codecs.kotlinx.KotlinSerializerCodecProvider
@@ -32,12 +33,13 @@ class MongoDatabaseTestcontainer(
             }
             val mongoClient = getClient(databaseName)
             val codecRegistry = CodecRegistries.fromRegistries(
-                CodecRegistries.fromProviders(
-                    KotlinSerializerCodecProvider(serializersModule = couponSerializersModule),
-                ),
                 CodecRegistries.fromCodecs(
+                    InstantCodec(),
                     LocalDateCodec(),
                     LocalDateTimeCodec(),
+                ),
+                CodecRegistries.fromProviders(
+                    KotlinSerializerCodecProvider(serializersModule = couponSerializersModule),
                 ),
                 MongoClientSettings.getDefaultCodecRegistry(),
             )

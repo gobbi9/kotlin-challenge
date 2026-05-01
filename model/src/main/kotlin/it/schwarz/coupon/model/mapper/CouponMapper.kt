@@ -3,6 +3,10 @@ package it.schwarz.coupon.model.mapper
 import it.schwarz.coupon.model.mongodb.CouponDocument
 import it.schwarz.coupon.model.rest.CouponDto
 import it.schwarz.coupon.model.rest.CouponListDto
+import it.schwarz.coupon.model.rest.ErrorDto
+
+fun Throwable.toErrorDto(fallbackMessage: String): ErrorDto =
+    ErrorDto(error = this.message ?: fallbackMessage)
 
 fun CouponDto.toEntity(): CouponDocument =
     CouponDocument(

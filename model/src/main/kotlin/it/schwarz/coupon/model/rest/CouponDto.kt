@@ -4,7 +4,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.Instant
 
 /**
 Insert with
@@ -23,7 +23,7 @@ data class CouponDto(
     val applicationCount: Int = -1,
     val version: Int = -1,
     @Contextual
-    val creationDateTime: LocalDateTime = LocalDateTime.now(),
+    val creationDateTime: Instant = Instant.now(),
     @Contextual
-    val updateDateTime: LocalDateTime = LocalDateTime.now(),
+    val updateDateTime: Instant = Instant.now(),
 )

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import org.bson.conversions.Bson
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.Instant
 
 class CouponRepositoryTest : StringSpec({
 
@@ -29,8 +29,8 @@ class CouponRepositoryTest : StringSpec({
             code = "TEST",
             discount = BigDecimal.TEN,
             description = "Test",
-            creationDateTime = LocalDateTime.now(),
-            updateDateTime = LocalDateTime.now(),
+            creationDateTime = Instant.now(),
+            updateDateTime = Instant.now(),
         )
         val slot = slot<FlowCollector<CouponDocument>>()
 
@@ -69,8 +69,8 @@ class CouponRepositoryTest : StringSpec({
             code = "TEST",
             discount = BigDecimal.TEN,
             description = "Test",
-            creationDateTime = LocalDateTime.now(),
-            updateDateTime = LocalDateTime.now(),
+            creationDateTime = Instant.now(),
+            updateDateTime = Instant.now(),
         )
         val slot = slot<FlowCollector<CouponDocument>>()
 
@@ -93,8 +93,8 @@ class CouponRepositoryTest : StringSpec({
             code = "SAVE_TEST",
             discount = BigDecimal.TEN,
             description = "Save Test",
-            creationDateTime = LocalDateTime.now(),
-            updateDateTime = LocalDateTime.now(),
+            creationDateTime = Instant.now(),
+            updateDateTime = Instant.now(),
         )
 
         every { database.getCollection<CouponDocument>(any<String>()) } returns collection
@@ -114,8 +114,8 @@ class CouponRepositoryTest : StringSpec({
                 code = "SAVE_ALL_1",
                 discount = BigDecimal.ONE,
                 description = "Save All 1",
-                creationDateTime = LocalDateTime.now(),
-                updateDateTime = LocalDateTime.now(),
+                creationDateTime = Instant.now(),
+                updateDateTime = Instant.now(),
             ),
         )
 

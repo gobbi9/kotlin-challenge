@@ -19,7 +19,7 @@ import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopPreparing
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
-import java.time.LocalDateTime
+import java.time.Instant
 
 private val log = KotlinLogging.logger {}
 
@@ -65,7 +65,7 @@ fun Application.configureKoin() {
                     ?: System.getenv("COUPON_RETENTION_MINUTES")?.toLong()
                     ?: 60L
 
-                val currentTime = LocalDateTime.now()
+                val currentTime = Instant.now()
                 single<CleanupRunner> {
                     CouponCleanupRunner(
                         collectionCleaner = get<CollectionCleaner>(),

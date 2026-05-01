@@ -4,8 +4,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.Application
 import io.opentelemetry.instrumentation.annotations.WithSpan
 import it.schwarz.coupon.cleanup.service.CleanupRunner
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 private val log = KotlinLogging.logger { }
 
@@ -26,17 +24,11 @@ class CleanupRunnerJob(
     suspend fun start() {
         log.info { "Cleanup runner job started" }
         log.info { "Number of runners to execute: ${cleanupRunners.size}" }
-        coroutineScope {
-            cleanupRunners.forEach { runner ->
-                log.debug { "Launching runner: ${runner::class.simpleName}" }
-                launch { runner.doCleanup() }
-            }
+        cleanupRunners.forEach { runner ->
+            log.debug { "Launching runner: ${runner::class.simpleName}" }
+            runner.doCleanup()
         }
         log.info { "Cleanup runner job is finished. Stopping application in 1 second." }
-        coroutineScope {
-            launch {
-                application.engine.stop(gracePeriodMillis = 1000, timeoutMillis = 5000)
-            }
-        }
+        application.engine.stop(gracePeriodMillis = 1000, timeoutMillis = 5000)
     }
 }

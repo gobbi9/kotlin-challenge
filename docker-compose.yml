@@ -1,4 +1,15 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: coupon-frontend
+    depends_on:
+      - coupon-service
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
   coupon-service:
     build:
       context: .
@@ -84,18 +95,18 @@ services:
         $$mongo --eval 'try { db.getSiblingDB("admin").createUser({ user: "admin", pwd: "admin", roles: [{ role: "root", db: "admin" }] }) } catch (e) { if (!e.message.includes("already exists")) throw e }'
 
   db-migrations:
-    image: eclipse-temurin:25-jdk-noble
+    build:
+      context: .
+      dockerfile: db-migrations/Dockerfile
     container_name: db-migrations
     depends_on:
       coupon-db-init:
         condition: service_completed_successfully
     restart: "no"
-    volumes:
-      - ./db-migrations/build/libs:/app
     environment:
       MONGODB_URI: mongodb://admin:admin@coupon-db:27017/?authSource=admin&replicaSet=coupon-db-rs
       MONGODB_DATABASE: coupon-db
-    command: ["java", "-jar", "/app/db-migrations.jar"]
+    command: ["java", "-jar", "db-migrations.jar"]
 
   jaeger:
     image: jaegertracing/all-in-one:1.60

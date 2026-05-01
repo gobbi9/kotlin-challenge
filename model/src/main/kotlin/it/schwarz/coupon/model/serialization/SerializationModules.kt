@@ -6,5 +6,6 @@ import kotlinx.serialization.modules.contextual
 val couponSerializersModule = SerializersModule {
     contextual(BigDecimalSerializer)
     contextual(ObjectIdSerializer)
+    contextual(InstantSerializer)
     contextual(LocalDateTimeSerializer)
 }

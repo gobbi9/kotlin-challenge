@@ -8,6 +8,7 @@ import it.schwarz.coupon.model.serialization.couponSerializersModule
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.bson.codecs.configuration.CodecRegistries
+import org.bson.codecs.jsr310.InstantCodec
 import org.bson.codecs.jsr310.LocalDateCodec
 import org.bson.codecs.jsr310.LocalDateTimeCodec
 import org.bson.codecs.kotlinx.KotlinSerializerCodec
@@ -20,12 +21,13 @@ class Database {
         log.debug { "Configuring database" }
 
         val codecRegistry = CodecRegistries.fromRegistries(
-            CodecRegistries.fromProviders(
-                KotlinSerializerCodecProvider(serializersModule = couponSerializersModule),
-            ),
             CodecRegistries.fromCodecs(
+                InstantCodec(),
                 LocalDateCodec(),
                 LocalDateTimeCodec(),
+            ),
+            CodecRegistries.fromProviders(
+                KotlinSerializerCodecProvider(serializersModule = couponSerializersModule),
             ),
             MongoClientSettings.getDefaultCodecRegistry(),
         )

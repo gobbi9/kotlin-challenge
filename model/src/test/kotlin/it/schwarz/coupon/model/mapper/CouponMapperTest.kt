@@ -6,14 +6,15 @@ import it.schwarz.coupon.model.mongodb.CouponDocument
 import it.schwarz.coupon.model.rest.CouponDto
 import org.bson.types.ObjectId
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class CouponMapperTest : StringSpec({
 
     "toDto should map entity to DTO" {
         val id = ObjectId()
-        val creationDateTime = LocalDateTime.now().minusDays(1)
-        val updateDateTime = LocalDateTime.now()
+        val creationDateTime = Instant.now().minus(1, ChronoUnit.DAYS)
+        val updateDateTime = Instant.now()
         val entity = CouponDocument(
             id = id,
             code = "PROMO20",
@@ -39,8 +40,8 @@ class CouponMapperTest : StringSpec({
 
     "toEntity should map DTO to entity" {
         val id = ObjectId()
-        val creationDateTime = LocalDateTime.now().minusDays(1)
-        val updateDateTime = LocalDateTime.now()
+        val creationDateTime = Instant.now().minus(1, ChronoUnit.DAYS)
+        val updateDateTime = Instant.now()
         val dto = CouponDto(
             id = id,
             code = "SALE10",
@@ -89,5 +90,19 @@ class CouponMapperTest : StringSpec({
         val result = dtos.toCouponListDto(page = 0, pageSize = 100)
 
         result.totalCount shouldBe 1L
+    }
+
+    "Throwable.toErrorDto should use exception message when present" {
+        val exception = RuntimeException("Custom error message")
+        val result = exception.toErrorDto("Fallback message")
+
+        result.error shouldBe "Custom error message"
+    }
+
+    "Throwable.toErrorDto should use fallback message when exception message is null" {
+        val exception = RuntimeException()
+        val result = exception.toErrorDto("Fallback message")
+
+        result.error shouldBe "Fallback message"
     }
 })

@@ -18,9 +18,8 @@ import it.schwarz.coupon.model.rest.CouponDto
 import it.schwarz.coupon.model.rest.CouponListDto
 import it.schwarz.coupon.service.configuration.serviceJson
 import it.schwarz.coupon.service.module
-import kotlinx.serialization.json.Json
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.Instant
 
 class CouponControllerIntegrationTest : StringSpec({
     val mongoDatabaseTestcontainer = MongoDatabaseTestcontainer(
@@ -35,8 +34,8 @@ class CouponControllerIntegrationTest : StringSpec({
             code = "INTEGRATION_TEST",
             discount = BigDecimal.TEN,
             description = "Integration Test",
-            creationDateTime = LocalDateTime.now(),
-            updateDateTime = LocalDateTime.now(),
+            creationDateTime = Instant.now(),
+            updateDateTime = Instant.now(),
         )
         collection.insertOne(document = coupon)
 
@@ -50,14 +49,45 @@ class CouponControllerIntegrationTest : StringSpec({
                 }
             }
 
-            val response = client.get("/coupons") {
-                contentType(ContentType.Application.Json)
-                setBody(listOf("INTEGRATION_TEST"))
-            }
+            val response = client.get("/coupons?codes=INTEGRATION_TEST")
             response.status shouldBe HttpStatusCode.OK
             val body = response.body<CouponListDto>()
             body.coupons.size shouldBe 1
             body.coupons.first().code shouldBe "INTEGRATION_TEST"
+        }
+    }
+
+    "GET /coupons should return all coupons if codes parameter is not provided" {
+        val testDatabase = mongoDatabaseTestcontainer.getDatabase()
+        val collection = testDatabase.getCollection<CouponDocument>(collectionName = "coupons")
+        // The previous test already inserted "INTEGRATION_TEST", so let's add another one
+        val coupon = CouponDocument(
+            code = "ALL_COUPONS_TEST",
+            discount = BigDecimal.ONE,
+            description = "All Coupons Test",
+            creationDateTime = Instant.now(),
+            updateDateTime = Instant.now(),
+        )
+        collection.insertOne(document = coupon)
+
+        testApplication {
+            application {
+                module()
+            }
+            val client = createClient {
+                install(ContentNegotiation) {
+                    json(serviceJson)
+                }
+            }
+
+            val response = client.get("/coupons")
+            response.status shouldBe HttpStatusCode.OK
+            val body = response.body<CouponListDto>()
+            // Expecting at least the 2 coupons we know about (from this test and the previous one if it ran)
+            // However, kotest StringSpec might run tests in isolation or sequentially sharing the DB.
+            // MongoDatabaseTestcontainer doesn't seem to drop the DB between tests in the same spec.
+            body.coupons.any { it.code == "ALL_COUPONS_TEST" } shouldBe true
+            body.coupons.any { it.code == "INTEGRATION_TEST" } shouldBe true
         }
     }
 
@@ -85,7 +115,7 @@ class CouponControllerIntegrationTest : StringSpec({
         }
 
         val collection = mongoDatabaseTestcontainer.getDatabase().getCollection<CouponDocument>(collectionName = "coupons")
-        collection.countDocuments() shouldBe 2
+        collection.countDocuments() shouldBe 3
     }
 
     "POST /coupons/bulk should save multiple coupons" {
@@ -112,7 +142,7 @@ class CouponControllerIntegrationTest : StringSpec({
         }
 
         val collection = mongoDatabaseTestcontainer.getDatabase().getCollection<CouponDocument>(collectionName = "coupons")
-        collection.countDocuments() shouldBe 4
+        collection.countDocuments() shouldBe 5
     }
 
     "GET /coupons should return 400 Bad Request if more than 100 codes are provided" {
@@ -128,10 +158,7 @@ class CouponControllerIntegrationTest : StringSpec({
                 }
             }
 
-            val response = client.get("/coupons") {
-                contentType(ContentType.Application.Json)
-                setBody(codes)
-            }
+            val response = client.get("/coupons?${codes.joinToString("&") { "codes=$it" }}")
             response.status shouldBe HttpStatusCode.BadRequest
         }
     }

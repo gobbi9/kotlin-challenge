@@ -18,18 +18,14 @@ COPY model/build.gradle.kts model/
 COPY configuration/build.gradle.kts configuration/
 COPY db-migrations/build.gradle.kts db-migrations/
 COPY frontend/build.gradle.kts frontend/
-RUN ./gradlew :cleanup:dependencies --no-daemon
+RUN ./gradlew :db-migrations:dependencies --no-daemon
 
 COPY . .
-RUN ./gradlew :cleanup:buildFatJar --no-daemon
+RUN ./gradlew :db-migrations:jar --no-daemon
 
 # Stage 2: Run
 FROM eclipse-temurin:25-jre-noble
 WORKDIR /app
-COPY --from=build /home/gradle/src/cleanup/build/libs/cleanup.jar cleanup.jar
+COPY --from=build /home/gradle/src/db-migrations/build/libs/db-migrations.jar db-migrations.jar
 
-# Download OpenTelemetry Java Agent (cached by Docker if URL doesn't change)
-ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
-
-EXPOSE 8083
-ENTRYPOINT ["java", "-javaagent:opentelemetry-javaagent.jar", "--enable-native-access=ALL-UNNAMED", "-jar", "cleanup.jar"]
+ENTRYPOINT ["java", "-jar", "db-migrations.jar"]

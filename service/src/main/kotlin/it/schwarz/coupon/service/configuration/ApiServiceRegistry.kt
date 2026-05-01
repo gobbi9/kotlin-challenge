@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationEnvironment
+import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -14,8 +15,9 @@ import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
+import io.opentelemetry.api.trace.Span
 import it.schwarz.coupon.configuration.Database
-import it.schwarz.coupon.model.rest.ErrorDto
+import it.schwarz.coupon.model.mapper.toErrorDto
 import it.schwarz.coupon.model.serialization.couponSerializersModule
 import it.schwarz.coupon.service.repository.CouponRepository
 import it.schwarz.coupon.service.rest.couponRoutes
@@ -40,14 +42,15 @@ fun Application.configureService() {
     configureKoin()
     configureSerialization()
     configureStatusPages()
-    install(DefaultHeaders)
+    install(plugin = DefaultHeaders)
+    configureTraceIdHeader()
     configureLogging()
     configureRouting()
 }
 
 fun Application.configureKoin() {
     log.debug { "Configuring Koin" }
-    install(Koin) {
+    install(plugin = Koin) {
         slf4jLogger()
         modules(
             module {
@@ -72,32 +75,32 @@ fun Application.configureKoin() {
 }
 
 fun Application.configureSerialization() {
-    install(ContentNegotiation) {
+    install(plugin = ContentNegotiation) {
         json(serviceJson)
     }
 }
 
 fun Application.configureStatusPages() {
-    install(StatusPages) {
+    install(plugin = StatusPages) {
         exception<CouponService.TooManyCodesException> { call, cause ->
-            log.error(cause) { "Bad Request: ${cause.message}" }
+            log.error(throwable = cause) { "Bad Request: ${cause.message}" }
             call.respond(
-                HttpStatusCode.BadRequest,
-                ErrorDto(error = cause.message ?: "Bad Request"),
+                status = HttpStatusCode.BadRequest,
+                message = cause.toErrorDto(fallbackMessage = "Bad Request"),
             )
         }
         exception<Throwable> { call, cause ->
-            log.error(cause) { "Unhandled exception: ${cause.message}" }
+            log.error(throwable = cause) { "Unhandled exception: ${cause.message}" }
             call.respond(
-                HttpStatusCode.InternalServerError,
-                ErrorDto(error = cause.message ?: "Internal Server Error"),
+                status = HttpStatusCode.InternalServerError,
+                message = cause.toErrorDto(fallbackMessage = "Internal Server Error"),
             )
         }
     }
 }
 
 fun Application.configureLogging() {
-    install(CallLogging)
+    install(plugin = CallLogging)
 }
 
 fun Application.configureRouting() {
@@ -105,4 +108,17 @@ fun Application.configureRouting() {
     routing {
         couponRoutes(couponService)
     }
+}
+
+val TraceIdHeaderPlugin = createApplicationPlugin(name = "TraceIdHeader") {
+    onCall { call ->
+        val traceId = Span.current().spanContext.traceId
+        if (traceId != "00000000000000000000000000000000") {
+            call.response.headers.append(name = "X-Trace-Id", value = traceId)
+        }
+    }
+}
+
+fun Application.configureTraceIdHeader() {
+    install(TraceIdHeaderPlugin)
 }

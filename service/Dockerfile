@@ -2,9 +2,12 @@
 FROM eclipse-temurin:25-jdk-noble AS build
 WORKDIR /home/gradle/src
 
-# Cache Gradle wrapper and dependencies
+# Cache Gradle wrapper and distribution
 COPY gradlew .
 COPY gradle gradle
+RUN ./gradlew --version --no-daemon
+
+# Cache dependencies
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY gradle.properties .
@@ -13,7 +16,9 @@ COPY cleanup/build.gradle.kts cleanup/
 COPY service/build.gradle.kts service/
 COPY model/build.gradle.kts model/
 COPY configuration/build.gradle.kts configuration/
-RUN ./gradlew :service:dependencies --no-daemon || true
+COPY db-migrations/build.gradle.kts db-migrations/
+COPY frontend/build.gradle.kts frontend/
+RUN ./gradlew :service:dependencies --no-daemon
 
 COPY . .
 RUN ./gradlew :service:buildFatJar --no-daemon
