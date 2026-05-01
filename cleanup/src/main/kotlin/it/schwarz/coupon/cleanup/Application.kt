@@ -9,6 +9,9 @@ import it.schwarz.coupon.cleanup.job.CleanupRunnerJob
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.get
 
+/**
+ * Main entry point of the application.
+ */
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain
         .main(args)
@@ -16,6 +19,12 @@ fun main(args: Array<String>) {
 
 private val log = KotlinLogging.logger {}
 
+/**
+ * Configures the application module.
+ *
+ * This function is responsible for setting up the application's components,
+ * including dependency injection and lifecycle event subscriptions.
+ */
 @Suppress("unused")
 fun Application.module() {
     configureKoin()

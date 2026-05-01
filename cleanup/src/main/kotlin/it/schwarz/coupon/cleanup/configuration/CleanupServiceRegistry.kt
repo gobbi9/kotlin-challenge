@@ -23,6 +23,12 @@ import java.time.Instant
 
 private val log = KotlinLogging.logger {}
 
+/**
+ * Configures Koin dependency injection for the cleanup application.
+ *
+ * This function sets up the Koin container, defines the necessary modules,
+ * and handles the lifecycle of the application by subscribing to Koin events.
+ */
 fun Application.configureKoin() {
     log.debug { "Configuring dependency injection using Koin" }
 

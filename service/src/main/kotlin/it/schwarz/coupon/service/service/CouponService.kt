@@ -13,11 +13,24 @@ private val log = KotlinLogging.logger {}
 
 private const val MAX_PAGE_SIZE = 100
 
+/**
+ * Service class for handling coupon-related business logic.
+ *
+ * This service provides methods for retrieving and saving coupons, including
+ * pagination and filtering by codes. It ensures that the number of requested
+ * codes does not exceed the allowed maximum.
+ */
 class CouponService(
     private val couponRepository: CouponRepository,
 ) {
+    /**
+     * Exception thrown when a request contains more coupon codes than the maximum allowed.
+     */
     class TooManyCodesException(message: String) : RuntimeException(message)
 
+    /**
+     * Retrieves a list of coupons based on optional codes and pagination parameters.
+     */
     @WithSpan("getCoupons")
     suspend fun getCoupons(
         codes: List<String>?,
@@ -66,6 +79,9 @@ class CouponService(
         )
     }
 
+    /**
+     * Saves a new coupon.
+     */
     @WithSpan("saveCoupon")
     suspend fun saveCoupon(couponDto: CouponDto): CouponDto {
         log.debug { "Saving coupon: ${couponDto.code}" }
@@ -73,6 +89,9 @@ class CouponService(
         return couponDto
     }
 
+    /**
+     * Saves multiple coupons in a single operation.
+     */
     @WithSpan("saveCoupons")
     suspend fun saveCoupons(couponDtos: List<CouponDto>) {
         validateSize(coupons = couponDtos)

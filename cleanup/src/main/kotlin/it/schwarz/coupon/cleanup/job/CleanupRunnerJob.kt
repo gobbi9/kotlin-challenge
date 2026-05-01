@@ -7,18 +7,21 @@ import it.schwarz.coupon.cleanup.service.CleanupRunner
 
 private val log = KotlinLogging.logger { }
 
+/**
+ * Job responsible for executing all registered cleanup runners.
+ *
+ * This class iterates through a list of [CleanupRunner]s and triggers their cleanup logic.
+ * After all runners have completed, it initiates the shutdown of the application.
+ */
 class CleanupRunnerJob(
     private val cleanupRunners: List<CleanupRunner>,
     private val application: Application,
 ) {
     /**
-     * There is no point checking if this job is already running, because
+     * Starts the cleanup job and executes each runner.
      *
-     * 1. it will only check if this method is being called again
-     * 2. if another container runs this job, it will concurrently anyway
-     * 3. delete operations should be idempotent and work no matter how many times they are called concurrently or sequentially
-     *
-     * Proper coordination or locking must be done separately by an external database or service.
+     * Note: This method does not prevent concurrent executions. Idempotency should be handled
+     * by the underlying operations or external coordination.
      */
     @WithSpan("cleanup-operation")
     suspend fun start() {

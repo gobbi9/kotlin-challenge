@@ -13,6 +13,18 @@ import it.schwarz.coupon.service.service.CouponService
 
 private val log = KotlinLogging.logger {}
 
+/**
+ * Defines the REST API routes for coupon management.
+ *
+ * This function sets up the following endpoints:
+ * - `GET /coupons`: Retrieves a paginated list of coupons, optionally filtered by coupon codes.
+ * - `POST /coupons`: Creates a new coupon.
+ * - `POST /coupons/bulk`: Performs a bulk creation of multiple coupons.
+ *
+ * These routes use the [CouponService] to interact with the underlying data store.
+ *
+ * @param couponService the service used for coupon business logic.
+ */
 fun Route.couponRoutes(couponService: CouponService) {
     route("/coupons") {
         get {

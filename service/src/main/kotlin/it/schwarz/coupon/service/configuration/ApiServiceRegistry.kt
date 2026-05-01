@@ -35,6 +35,10 @@ import org.koin.logger.slf4jLogger
 
 private val log = KotlinLogging.logger {}
 
+/**
+ * The [Json] configuration used for serializing and deserializing data in the service.
+ * It uses the custom [couponSerializersModule] and is configured to ignore unknown keys.
+ */
 val serviceJson = Json {
     serializersModule = couponSerializersModule
     ignoreUnknownKeys = true
@@ -42,6 +46,12 @@ val serviceJson = Json {
     explicitNulls = false
 }
 
+/**
+ * Entry point for configuring all aspects of the application service.
+ *
+ * This function calls individual configuration functions to set up Koin,
+ * serialization, validation, status pages, headers, logging, and routing.
+ */
 fun Application.configureService() {
     configureKoin()
     configureSerialization()
@@ -53,6 +63,11 @@ fun Application.configureService() {
     configureRouting()
 }
 
+/**
+ * Configures Koin dependency injection for the application.
+ *
+ * Sets up the required modules for database connectivity, repositories, and services.
+ */
 fun Application.configureKoin() {
     log.debug { "Configuring Koin" }
     install(plugin = Koin) {
@@ -79,18 +94,27 @@ fun Application.configureKoin() {
     }
 }
 
+/**
+ * Configures content negotiation using Kotlin serialization.
+ */
 fun Application.configureSerialization() {
     install(plugin = ContentNegotiation) {
         json(serviceJson)
     }
 }
 
+/**
+ * Configures request validation for incoming DTOs.
+ */
 fun Application.configureRequestValidation() {
     install(plugin = RequestValidation) {
         validateCouponDto()
     }
 }
 
+/**
+ * Configures status pages to handle exceptions and return appropriate HTTP responses.
+ */
 fun Application.configureStatusPages() {
     install(plugin = StatusPages) {
         exception<RequestValidationException> { call, cause ->
@@ -117,10 +141,16 @@ fun Application.configureStatusPages() {
     }
 }
 
+/**
+ * Configures call logging for the application.
+ */
 fun Application.configureLogging() {
     install(plugin = CallLogging)
 }
 
+/**
+ * Configures the routing for the application, including coupon routes and Swagger UI.
+ */
 fun Application.configureRouting() {
     val couponService by inject<CouponService>()
     routing {
@@ -129,6 +159,9 @@ fun Application.configureRouting() {
     }
 }
 
+/**
+ * A Ktor plugin that adds an "X-Trace-Id" header to the response if a valid OpenTelemetry trace ID is present.
+ */
 val TraceIdHeaderPlugin = createApplicationPlugin(name = "TraceIdHeader") {
     onCall { call ->
         val traceId = Span.current().spanContext.traceId
@@ -138,6 +171,9 @@ val TraceIdHeaderPlugin = createApplicationPlugin(name = "TraceIdHeader") {
     }
 }
 
+/**
+ * Installs the [TraceIdHeaderPlugin] into the application.
+ */
 fun Application.configureTraceIdHeader() {
     install(TraceIdHeaderPlugin)
 }

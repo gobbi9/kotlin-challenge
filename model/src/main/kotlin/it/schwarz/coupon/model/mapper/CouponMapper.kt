@@ -5,9 +5,15 @@ import it.schwarz.coupon.model.rest.CouponDto
 import it.schwarz.coupon.model.rest.CouponListDto
 import it.schwarz.coupon.model.rest.ErrorDto
 
+/**
+ * Converts a [Throwable] to an [ErrorDto].
+ */
 fun Throwable.toErrorDto(fallbackMessage: String): ErrorDto =
     ErrorDto(error = this.message ?: fallbackMessage)
 
+/**
+ * Converts a [CouponDto] to a [CouponDocument].
+ */
 fun CouponDto.toEntity(): CouponDocument =
     CouponDocument(
         id = id,
@@ -20,6 +26,9 @@ fun CouponDto.toEntity(): CouponDocument =
         updateDateTime = updateDateTime,
     )
 
+/**
+ * Converts a [CouponDocument] to a [CouponDto].
+ */
 fun CouponDocument.toDto(): CouponDto =
     CouponDto(
         id = id,
@@ -32,6 +41,9 @@ fun CouponDocument.toDto(): CouponDto =
         updateDateTime = updateDateTime,
     )
 
+/**
+ * Converts a list of [CouponDto]s to a [CouponListDto].
+ */
 fun List<CouponDto>.toCouponListDto(
     page: Int,
     pageSize: Int,

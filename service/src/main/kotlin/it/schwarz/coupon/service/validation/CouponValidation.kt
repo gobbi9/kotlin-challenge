@@ -5,6 +5,14 @@ import io.ktor.server.plugins.requestvalidation.ValidationResult
 import it.schwarz.coupon.model.rest.CouponDto
 import java.math.BigDecimal
 
+/**
+ * Configures request validation for [CouponDto].
+ *
+ * This function defines the validation rules for coupon data, ensuring that:
+ * - The coupon code is not blank.
+ * - The discount is a positive value.
+ * - The description is not empty.
+ */
 fun RequestValidationConfig.validateCouponDto() {
     validate<CouponDto> { coupon ->
         val reasons = mutableListOf<String>()

@@ -14,12 +14,33 @@ import java.util.concurrent.TimeUnit
 
 private val log = KotlinLogging.logger {}
 
+/**
+ * Data class representing a database migration.
+ *
+ * It contains an identifier, a descriptive name, and the actual migration logic
+ * to be executed against the database.
+ */
 data class Migration(
+    /**
+     * The unique identifier for the migration.
+     */
     val id: String,
+    /**
+     * A brief description of the migration's purpose.
+     */
     val description: String,
+    /**
+     * The suspendable function that performs the migration action.
+     */
     val action: suspend (MongoDatabase) -> Unit,
 )
 
+/**
+ * Object responsible for managing and executing MongoDB schema migrations.
+ *
+ * It keeps track of applied migrations in a specific collection to ensure
+ * each migration is only executed once.
+ */
 object MongoMigrations {
     private const val MIGRATIONS_COLLECTION = "schema_migrations"
 
@@ -50,6 +71,9 @@ object MongoMigrations {
         ),
     )
 
+    /**
+     * Executes all pending migrations against the specified MongoDB database.
+     */
     fun run(mongodbUri: String, databaseName: String, databaseProvider: () -> Database = { Database() }) {
         log.info { "Starting MongoDB migrations for database: $databaseName" }
         val client = databaseProvider().configureDatabase(mongodbUri)
