@@ -99,5 +99,6 @@ dependencies {
 }
 
 tasks.register("prepareKotlinBuildScriptModel") {
-    // Dummy task for IDE
+    group = "dummy"
+    description = "Dummy task for IDE"
 }

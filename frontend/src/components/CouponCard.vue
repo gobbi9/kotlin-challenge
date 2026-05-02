@@ -33,8 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import type { CouponDto } from '../types/CouponDto'
+import {computed, ref} from 'vue'
+import type {CouponDto} from '../types/CouponDto'
 
 const props = defineProps<{ coupon: CouponDto; colorIndex: number }>()
 
@@ -113,14 +113,15 @@ function spawnParticles(e: MouseEvent) {
     p.className = 'spark-particle'
     const angle = Math.random() * 360
     const dist = 50 + Math.random() * 70
-    const size = 4 + Math.random() * 7
+    const size = Math.round(4 + Math.random() * 7)
+    const duration = (1.5 + Math.random() * 0.5).toFixed(2)
     p.style.cssText = `
-      left:${x}px;top:${y}px;
+      left:${Math.round(x)}px;top:${Math.round(y)}px;
       width:${size}px;height:${size}px;
-      --dx:${Math.cos((angle * Math.PI) / 180) * dist}px;
-      --dy:${Math.sin((angle * Math.PI) / 180) * dist}px;
+      --dx:${Math.round(Math.cos((angle * Math.PI) / 180) * dist)}px;
+      --dy:${Math.round(Math.sin((angle * Math.PI) / 180) * dist)}px;
       background:${SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)]};
-      animation-duration:${1.5 + Math.random() * 0.5}s;
+      animation-duration:${duration}s;
     `
     container.appendChild(p)
     p.addEventListener('animationend', () => p.remove(), { once: true })
@@ -285,6 +286,7 @@ function spawnParticles(e: MouseEvent) {
 </style>
 
 <style>
+/* noinspection CssUnusedSymbol */
 .spark-particle {
   position: absolute;
   border-radius: 50%;
@@ -295,6 +297,10 @@ function spawnParticles(e: MouseEvent) {
 
 @keyframes spark-burst {
   0%   { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.1); }
+  /* noinspection CssUnresolvedCustomProperty */
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--dx, 0px), var(--dy, 0px)) scale(0.1);
+  }
 }
 </style>

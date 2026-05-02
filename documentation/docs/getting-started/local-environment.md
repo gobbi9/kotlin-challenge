@@ -74,14 +74,14 @@ The `coupon-api/` folder is a [Bruno](https://www.usebruno.com) collection:
 ```text
 coupon-api/
 ├── bruno.json
+├── Create coupons bulk.bru
 ├── Get coupons.bru
 ├── Get coupons by codes.bru
 └── Save coupons.bru
 ```
 
 Open Bruno → "Open Collection" → point it at `coupon-api/`. The default base URL is
-`http://localhost:8080/`; adjust it to `http://localhost:8082/` (or use Bruno
-environments) to match this project.
+already set to `http://localhost:8082/` (pre-configured in the collection) to match this project.
 
 A starter request body for `POST /coupons`:
 

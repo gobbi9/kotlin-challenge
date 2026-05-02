@@ -14,7 +14,6 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
  *
  * This function initializes the service by calling [configureMigrations] and [configureService].
  */
-@Suppress("unused")
 fun Application.module() {
     configureMigrations()
     configureService()

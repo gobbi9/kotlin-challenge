@@ -26,7 +26,6 @@ private val log = KotlinLogging.logger {}
  * This function is responsible for setting up the application's components,
  * including dependency injection and lifecycle event subscriptions.
  */
-@Suppress("unused")
 fun Application.module() {
     configureMigrations()
     configureKoin()

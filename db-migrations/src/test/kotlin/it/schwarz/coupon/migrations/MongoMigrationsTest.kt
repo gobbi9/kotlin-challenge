@@ -2,7 +2,6 @@ package it.schwarz.coupon.migrations
 
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
-import com.mongodb.reactivestreams.client.MongoClient
 import io.kotest.core.spec.style.StringSpec
 import io.mockk.coEvery
 import io.mockk.every

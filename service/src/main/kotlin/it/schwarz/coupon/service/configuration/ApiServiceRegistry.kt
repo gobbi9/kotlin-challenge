@@ -53,7 +53,7 @@ val serviceJson = Json {
 /**
  * Executes MongoDB migrations if the necessary configuration is present.
  */
-fun Application.configureMigrations() {
+fun configureMigrations() {
     MongoMigrations.runMigrations()
 }
 

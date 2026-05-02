@@ -22,6 +22,7 @@ const config = {
     organizationName: 'kaufa-digits',
     projectName: 'coupon-kotlin-gobbi',
     deploymentBranch: 'gh-pages',
+    // @ts-ignore
     trailingSlash: false,
 
     onBrokenLinks: 'warn',

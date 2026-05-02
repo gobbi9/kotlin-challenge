@@ -25,6 +25,9 @@
     --ifm-navbar-height: 64px;
     --ifm-navbar-padding-vertical: 0.6rem;
     --ifm-toc-border-color: transparent;
+    --ifm-color-emphasis-100: #f5f6f7;
+    --ifm-color-emphasis-700: #4a4a4a;
+    --search-local-modal-width: 560px;
 
     --ifm-background-color: #ffffff;
     --ifm-background-surface-color: #fafbff;
@@ -52,26 +55,31 @@
 }
 
 /* Navbar polish */
+/* noinspection CssUnusedSymbol */
 .navbar {
     border-bottom: 1px solid var(--ifm-color-emphasis-200);
     backdrop-filter: saturate(140%) blur(8px);
 }
 
+/* noinspection CssUnusedSymbol */
 .navbar__inner {
     position: relative;
 }
 
 /* Center search bar */
+/* noinspection CssUnusedSymbol */
 .navbar__items--right {
     flex: 1;
     justify-content: flex-end;
 }
 
+/* noinspection CssUnusedSymbol */
 .navbar__items:not(.navbar__items--right) {
     flex: 1;
 }
 
 /* Higher specificity than the theme's single-class rule that forces position:relative */
+/* noinspection CssUnusedSymbol */
 .navbar__inner .navbar__search {
     position: absolute;
     left: 50%;
@@ -86,50 +94,59 @@
 /* Match input width to dropdown (--search-local-modal-width default 560px).
    The plugin aligns the dropdown right-edge to the container right-edge (right:0),
    so equal widths make them perfectly flush on both sides. */
+/* noinspection CssUnusedSymbol */
 .navbar__inner .navbar__search .navbar__search-input {
     width: var(--search-local-modal-width, 560px);
     max-width: 40vw;
 }
 
 @media (max-width: 996px) {
+    /* noinspection CssUnusedSymbol */
     .navbar__inner .navbar__search {
         position: static;
         transform: none;
     }
 
+    /* noinspection CssUnusedSymbol */
     .navbar__inner .navbar__search .navbar__search-input {
         width: auto;
         max-width: none;
     }
 }
 
+/* noinspection CssUnusedSymbol */
 .navbar__title {
     font-weight: 700;
     letter-spacing: -0.01em;
 }
 
+/* noinspection CssUnusedSymbol */
 .navbar__logo img {
     height: 28px;
     width: 28px;
 }
 
 /* Hero / homepage */
+/* noinspection CssUnusedSymbol */
 .hero {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0));
     padding: 4rem 0 3rem;
 }
 
+/* noinspection CssUnusedSymbol */
 [data-theme='dark'] .hero {
     background: linear-gradient(135deg, rgba(139, 141, 246, 0.10), rgba(13, 16, 24, 0) 60%);
 }
 
+/* noinspection CssUnusedSymbol */
 .hero__title {
     font-size: 3rem;
     letter-spacing: -0.02em;
 }
 
+/* noinspection CssUnusedSymbol */
 .hero__subtitle {
-    color: var(--ifm-color-emphasis-700);
+    color: var(--ifm-color-emphasis-700, #4a4a4a);
     font-weight: 400;
     font-size: 1.15rem;
     max-width: 700px;
@@ -137,33 +154,40 @@
 }
 
 /* Sidebar */
+/* noinspection CssUnusedSymbol */
 .menu__link {
     font-size: 0.92rem;
     border-radius: 6px;
 }
 
+/* noinspection CssUnusedSymbol */
 .menu__link--active {
     font-weight: 600;
 }
 
+/* noinspection CssUnusedSymbol */
 .menu__list-item-collapsible:hover,
+    /* noinspection CssUnusedSymbol */
 .menu__link:hover {
     background-color: var(--ifm-color-emphasis-200);
 }
 
 /* Cards */
+/* noinspection CssUnusedSymbol */
 .card {
     border: 1px solid var(--ifm-color-emphasis-200);
     border-radius: 12px;
     transition: border-color 160ms ease, transform 160ms ease;
 }
 
+/* noinspection CssUnusedSymbol */
 .card:hover {
     border-color: var(--ifm-color-primary);
     transform: translateY(-2px);
 }
 
 /* Code blocks */
+/* noinspection CssUnusedSymbol */
 .theme-code-block {
     border-radius: 10px !important;
     border: 1px solid var(--ifm-color-emphasis-200);
@@ -178,11 +202,12 @@ table {
 }
 
 table th {
-    background: var(--ifm-color-emphasis-100);
+    background: var(--ifm-color-emphasis-100, #f5f6f7);
     font-weight: 600;
 }
 
 /* Admonitions: tighter and brand-aligned */
+/* noinspection CssUnusedSymbol */
 .alert {
     border-radius: 10px;
     border-left-width: 4px;

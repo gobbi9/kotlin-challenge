@@ -4,7 +4,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import it.schwarz.coupon.model.rest.CouponDto
 import it.schwarz.coupon.service.configuration.serviceJson
-import kotlinx.serialization.decodeFromString
 import java.math.BigDecimal
 
 class CouponDtoSerializationTest : StringSpec({
