@@ -76,6 +76,14 @@ tasks.register<NpmTask>("docusaurusClean") {
     args.set(listOf("run", "clean-api-docs"))
 }
 
+tasks.register<NpmTask>("deploy") {
+    group = "documentation"
+    description = "Deploys the Docusaurus documentation site."
+    dependsOn(tasks.named("build"))
+    args.set(listOf("run", "deploy"))
+    environment.set(mapOf("USE_SSH" to "true"))
+}
+
 tasks.register<Delete>("clean") {
     group = "build"
     description = "Cleans the documentation build output and Docusaurus cache."

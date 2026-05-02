@@ -114,7 +114,7 @@ against a local service (`localhost:8082`), you need to enable CORS in the servi
 In `service/local.env`, ensure:
 
 - `ALLOW_CORS=true`
-- `CORS_DOMAINS=localhost,kaufa-digits.github.io`
+- `CORS_DOMAINS=localhost,gobbi9.github.io`
 
 The `CORS_DOMAINS` variable is a comma-separated list of allowed domains. For `localhost`, all ports are automatically
 allowed.

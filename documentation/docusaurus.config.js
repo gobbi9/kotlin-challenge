@@ -16,11 +16,11 @@ const config = {
     tagline: 'Technical documentation for the coupon-kotlin service',
     favicon: 'img/coupon-favicon.svg',
 
-    url: 'https://kaufa-digits.github.io',
-    baseUrl: '/coupon-kotlin-gobbi/',
+    url: 'https://gobbi9.github.io',
+    baseUrl: '/kotlin-challenge/',
 
-    organizationName: 'kaufa-digits',
-    projectName: 'coupon-kotlin-gobbi',
+    organizationName: 'gobbi9',
+    projectName: 'kotlin-challenge',
     deploymentBranch: 'gh-pages',
     // @ts-ignore
     trailingSlash: false,
@@ -51,7 +51,7 @@ const config = {
                     routeBasePath: '/',
                     sidebarPath: './sidebars.ts',
                     editUrl:
-                        'https://github.com/kaufa-digits/coupon-kotlin-gobbi/edit/main/documentation/',
+                        'https://github.com/gobbi9/kotlin-challenge/edit/main/documentation/',
                     docItemComponent: '@theme/ApiItem',
                     remarkPlugins: [
                         [simplePlantUML, {baseUrl: 'https://www.plantuml.com/plantuml/svg'}]
@@ -115,7 +115,7 @@ const config = {
                         label: 'Docs',
                     },
                     {
-                        href: 'https://github.com/kaufa-digits/coupon-kotlin-gobbi',
+                        href: 'https://github.com/gobbi9/kotlin-challenge',
                         label: 'GitHub',
                         position: 'right',
                     },
@@ -137,7 +137,7 @@ const config = {
                         items: [
                             {
                                 label: 'GitHub',
-                                href: 'https://github.com/kaufa-digits/coupon-kotlin-gobbi',
+                                href: 'https://github.com/gobbi9/kotlin-challenge',
                             },
                         ],
                     },

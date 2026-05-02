@@ -1,7 +1,7 @@
 # coupon-kotlin
 
-Kotlin/Ktor coupon service. Full technical documentation lives can be accessed
-here: <https://kaufa-digits.github.io/coupon-kotlin-gobbi/> or in the `documentation/`
+Kotlin/Ktor coupon service. Full technical documentation can be accessed
+here: <https://gobbi9.github.io/kotlin-challenge/> or in the `documentation/`
 module and is rendered by Docusaurus.
 
 ## Local setup
