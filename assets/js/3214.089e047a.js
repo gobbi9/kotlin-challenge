@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkcoupon_kotlin_documentation=globalThis.webpackChunkcoupon_kotlin_documentation||[]).push([[3214],{53214(o,c,e){e.d(c,{createPacketServices:()=>n.$});var n=e(75893);e(72519)}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkcoupon_kotlin_documentation=globalThis.webpackChunkcoupon_kotlin_documentation||[]).push([[1947],{1947(o,e,n){n.d(e,{createWardleyServices:()=>a.J});var a=n(22295);n(72519)}}]);
