@@ -596,8 +596,14 @@ build
 # MacOS
 .DS_Store
 
+# Generic node_modules for any Gradle modules
+**/node_modules/
+
+# Docusaurus (from documentation/)
+documentation/.docusaurus/
+documentation/docs/api/
+
 ### Node/Vue/TS (frontend) ###
-frontend/node_modules/
 frontend/dist/
 frontend/*.local
 frontend/.eslintcache

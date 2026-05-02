@@ -1,0 +1,212 @@
+/**
+ * Custom theme inspired by devspace.sh — clean dark-first, accent purple/blue,
+ * generous spacing, dense sidebar.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    --ifm-color-primary: #6366f1;
+    --ifm-color-primary-dark: #4f51d4;
+    --ifm-color-primary-darker: #4a4ccb;
+    --ifm-color-primary-darkest: #3d3fa6;
+    --ifm-color-primary-light: #7a7df0;
+    --ifm-color-primary-lighter: #888bf3;
+    --ifm-color-primary-lightest: #b0b3f8;
+
+    --ifm-font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ifm-font-family-monospace: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+    --ifm-heading-font-weight: 700;
+    --ifm-h1-font-size: 2.4rem;
+    --ifm-h2-font-size: 1.8rem;
+
+    --ifm-code-font-size: 92%;
+    --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.12);
+    --ifm-navbar-height: 64px;
+    --ifm-navbar-padding-vertical: 0.6rem;
+    --ifm-toc-border-color: transparent;
+
+    --ifm-background-color: #ffffff;
+    --ifm-background-surface-color: #fafbff;
+
+    --ifm-link-hover-decoration: none;
+}
+
+[data-theme='dark'] {
+    --ifm-color-primary: #8b8df6;
+    --ifm-color-primary-dark: #6f72f3;
+    --ifm-color-primary-darker: #6164f1;
+    --ifm-color-primary-darkest: #4346e9;
+    --ifm-color-primary-light: #a7a9f9;
+    --ifm-color-primary-lighter: #b4b6fa;
+    --ifm-color-primary-lightest: #d6d7fc;
+
+    --ifm-background-color: #0d1018;
+    --ifm-background-surface-color: #11141d;
+    --ifm-navbar-background-color: #0d1018;
+    --ifm-footer-background-color: #0a0c12;
+    --ifm-color-emphasis-200: #1a1d27;
+    --ifm-color-emphasis-300: #232733;
+
+    --docusaurus-highlighted-code-line-bg: rgba(139, 141, 246, 0.14);
+}
+
+/* Navbar polish */
+.navbar {
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    backdrop-filter: saturate(140%) blur(8px);
+}
+
+.navbar__inner {
+    position: relative;
+}
+
+/* Center search bar */
+.navbar__items--right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.navbar__items:not(.navbar__items--right) {
+    flex: 1;
+}
+
+/* Higher specificity than the theme's single-class rule that forces position:relative */
+.navbar__inner .navbar__search {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Match input width to dropdown (--search-local-modal-width default 560px).
+   The plugin aligns the dropdown right-edge to the container right-edge (right:0),
+   so equal widths make them perfectly flush on both sides. */
+.navbar__inner .navbar__search .navbar__search-input {
+    width: var(--search-local-modal-width, 560px);
+    max-width: 40vw;
+}
+
+@media (max-width: 996px) {
+    .navbar__inner .navbar__search {
+        position: static;
+        transform: none;
+    }
+
+    .navbar__inner .navbar__search .navbar__search-input {
+        width: auto;
+        max-width: none;
+    }
+}
+
+.navbar__title {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.navbar__logo img {
+    height: 28px;
+    width: 28px;
+}
+
+/* Hero / homepage */
+.hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0));
+    padding: 4rem 0 3rem;
+}
+
+[data-theme='dark'] .hero {
+    background: linear-gradient(135deg, rgba(139, 141, 246, 0.10), rgba(13, 16, 24, 0) 60%);
+}
+
+.hero__title {
+    font-size: 3rem;
+    letter-spacing: -0.02em;
+}
+
+.hero__subtitle {
+    color: var(--ifm-color-emphasis-700);
+    font-weight: 400;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 1rem auto 0;
+}
+
+/* Sidebar */
+.menu__link {
+    font-size: 0.92rem;
+    border-radius: 6px;
+}
+
+.menu__link--active {
+    font-weight: 600;
+}
+
+.menu__list-item-collapsible:hover,
+.menu__link:hover {
+    background-color: var(--ifm-color-emphasis-200);
+}
+
+/* Cards */
+.card {
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 12px;
+    transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.card:hover {
+    border-color: var(--ifm-color-primary);
+    transform: translateY(-2px);
+}
+
+/* Code blocks */
+.theme-code-block {
+    border-radius: 10px !important;
+    border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Tables */
+table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+}
+
+table th {
+    background: var(--ifm-color-emphasis-100);
+    font-weight: 600;
+}
+
+/* Admonitions: tighter and brand-aligned */
+.alert {
+    border-radius: 10px;
+    border-left-width: 4px;
+}
+
+/* Themed images: hide the wrong-mode variant */
+[data-theme='light'] img[src*='-dark'] {
+    display: none;
+}
+
+[data-theme='dark'] img[src*='-light'] {
+    display: none;
+}
+
+/* PlantUML images: keep them readable on dark backgrounds */
+.plantuml img,
+img[src*='plantuml.com'] {
+    max-width: 100%;
+    width: auto;
+}
+
+[data-theme='dark'] .plantuml img,
+[data-theme='dark'] img[src*='plantuml.com'] {
+    background: #f6f7fb;
+    padding: 1rem;
+    border-radius: 8px;
+}

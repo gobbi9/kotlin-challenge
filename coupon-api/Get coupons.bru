@@ -1,13 +1,19 @@
 meta {
   name: Get coupons
   type: http
-  seq: 2
+  seq: 1
 }
 
 get {
-  url: http://localhost:8080/coupons
+  url: http://localhost:8082/coupons
   body: none
   auth: inherit
+}
+
+params:query {
+  ~codes: abc123,def456
+  ~page: 0
+  ~pageSize: 10
 }
 
 settings {

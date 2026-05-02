@@ -1,0 +1,170 @@
+openapi: 3.1.1
+info:
+  title: Coupon Service API
+  description: |
+    REST API exposed by the `service` module of `coupon-kotlin`.
+    All responses include an `X-Trace-Id` header populated by `TraceIdHeaderPlugin`,
+    which can be looked up in Jaeger at <http://localhost:16686>.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082
+    description: Local development (Docker Compose or IntelliJ run config)
+tags:
+  - name: Coupons
+    description: Manage coupon entries.
+paths:
+  /coupons:
+    post:
+      tags: [ Coupons ]
+      operationId: createCoupon
+      summary: Create a single coupon
+      description: |
+        Persists a single coupon. The body is validated by the
+        Ktor `RequestValidation` plugin via `validateCouponDto()` — invalid bodies
+        return HTTP 400 with an `ErrorDto`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CouponDto"
+            examples:
+              default:
+                summary: Sample coupon
+                value:
+                  code: abc123
+                  discount: 12.54
+                  description: best coupon ev4
+                  applicationCount: 0
+      responses:
+        "200":
+          description: Created coupon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponDto"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+    get:
+      tags: [ Coupons ]
+      operationId: listCoupons
+      summary: List coupons
+      description: |
+        Returns coupons with optional filtering by code list and pagination.
+      parameters:
+        - name: codes
+          in: query
+          description: Comma-separated coupon codes to filter by.
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Zero-based page index.
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: Page size (capped server-side).
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated list of coupons
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponListDto"
+  /coupons/bulk:
+    post:
+      tags: [ Coupons ]
+      operationId: createCouponsBulk
+      summary: Create coupons in bulk
+      description: |
+        Persists a batch of coupons in one request. Bulk size is bounded —
+        oversized batches return HTTP 400 (`TooManyCodesException`).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CouponDto"
+      responses:
+        "204":
+          description: All coupons stored
+        "400":
+          description: Bulk size exceeded or validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+webhooks: { }
+components:
+  schemas:
+    CouponDto:
+      type: object
+      title: it.schwarz.coupon.model.rest.CouponDto
+      required:
+        - code
+        - discount
+        - description
+      properties:
+        id:
+          type: string
+          description: BSON ObjectId, server-assigned.
+        code:
+          type: string
+          description: Unique coupon code.
+        discount:
+          type: number
+          description: Discount value (BigDecimal).
+        description:
+          type: string
+        applicationCount:
+          type: integer
+          default: -1
+        version:
+          type: integer
+          description: Optimistic-locking version.
+          default: -1
+        creationDateTime:
+          type: string
+          format: date-time
+        updateDateTime:
+          type: string
+          format: date-time
+    CouponListDto:
+      type: object
+      title: it.schwarz.coupon.model.rest.CouponListDto
+      required:
+        - coupons
+        - totalCount
+        - page
+        - pageSize
+      properties:
+        coupons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CouponDto"
+        totalCount:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+    ErrorDto:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string

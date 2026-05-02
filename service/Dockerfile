@@ -18,6 +18,7 @@ COPY model/build.gradle.kts model/
 COPY configuration/build.gradle.kts configuration/
 COPY db-migrations/build.gradle.kts db-migrations/
 COPY frontend/build.gradle.kts frontend/
+COPY documentation/build.gradle.kts documentation/
 RUN ./gradlew :service:dependencies --no-daemon
 
 COPY . .

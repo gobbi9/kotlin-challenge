@@ -3,6 +3,8 @@ package it.schwarz.coupon.service.configuration
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -11,6 +13,7 @@ import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.RequestValidationException
@@ -62,6 +65,7 @@ fun Application.configureMigrations() {
  */
 fun Application.configureService() {
     configureKoin()
+    configureCORS()
     configureSerialization()
     configureRequestValidation()
     configureStatusPages()
@@ -99,6 +103,39 @@ fun Application.configureKoin() {
                 single { CouponService(get()) }
             },
         )
+    }
+}
+
+/**
+ * Configures CORS for the application.
+ */
+fun Application.configureCORS() {
+    val allowCors = (System.getProperty("ALLOW_CORS") ?: System.getenv("ALLOW_CORS"))?.toBoolean() ?: false
+    if (allowCors) {
+        val corsDomains = (System.getProperty("CORS_DOMAINS") ?: System.getenv("CORS_DOMAINS"))
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?: emptyList()
+
+        log.info { "Configuring CORS with domains: $corsDomains" }
+        install(plugin = CORS) {
+            corsDomains.forEach { domain ->
+                if (domain == "localhost") {
+                    // any localhost port should be allowed
+                    anyHost()
+                } else {
+                    allowHost(domain, schemes = listOf("https"))
+                }
+            }
+            allowMethod(HttpMethod.Options)
+            allowMethod(HttpMethod.Put)
+            allowMethod(HttpMethod.Delete)
+            allowMethod(HttpMethod.Patch)
+            allowHeader(HttpHeaders.Authorization)
+            allowHeader(HttpHeaders.ContentType)
+            allowNonSimpleContentTypes = true
+        }
     }
 }
 

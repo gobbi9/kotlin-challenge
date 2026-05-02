@@ -1,0 +1,37 @@
+---
+id: ui-screenshots
+title: UI Screenshots
+sidebar_position: 1
+---
+
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# UI Screenshots
+
+The Vue 3 frontend (module `frontend`) renders the live coupon list and exposes simple
+forms to create and inspect coupons. The screenshots below switch automatically with the
+current site theme.
+
+<ThemedImage
+  alt="Coupon frontend in light and dark mode"
+  sources={{
+    light: useBaseUrl('/img/screenshot-light.png'),
+    dark: useBaseUrl('/img/screenshot-dark.png'),
+  }}
+/>
+
+:::tip Theme-aware images
+The screenshots use Docusaurus' [`<ThemedImage>`](https://docusaurus.io/docs/markdown-features/assets#themed-images)
+component — toggle the colour mode in the navbar to see the dark variant.
+:::
+
+## What you're looking at
+
+- **Coupon list** &mdash; live data fetched from `GET /coupons` on the service (port `8082`) every 10 seconds.
+- **Trace headers** &mdash; every response carries an `X-Trace-Id` header populated by
+  [`TraceIdHeaderPlugin`](../development/tracing-observability), correlating browser
+  requests with backend spans in Jaeger. This can be verified using the Network Inspect function of the browser.
+- **TTL behaviour** &mdash; coupons are evicted automatically by the MongoDB TTL index
+  installed by [`db-migrations`](../development/database-migrations) (3 minutes by default
+  in local mode), so the list can shrink while you watch.

@@ -1,0 +1,51 @@
+meta {
+  name: Create coupons bulk
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8082/coupons/bulk
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    {
+      "code": "BULK001",
+      "discount": 10.50,
+      "description": "Bulk coupon 1",
+      "applicationCount": 0
+    },
+    {
+      "code": "BULK002",
+      "discount": 20.00,
+      "description": "Bulk coupon 2",
+      "applicationCount": 0
+    },
+    {
+      "code": "BULK003",
+      "discount": 5.99,
+      "description": "Bulk coupon 3",
+      "applicationCount": 0
+    },
+    {
+      "code": "BULK004",
+      "discount": 15.75,
+      "description": "Bulk coupon 4",
+      "applicationCount": 0
+    },
+    {
+      "code": "BULK005",
+      "discount": 100.00,
+      "description": "Bulk coupon 5",
+      "applicationCount": 0
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

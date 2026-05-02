@@ -22,6 +22,13 @@ openTelemetryInstrumentationVersion = "2.13.0-alpha"
 openTelemetryInstrumentationAnnotationsVersion = "2.13.0"
 kotlinxSerializationVersion = "1.8.0"
 
+# Documentation site
+nodeGradleVersion = "7.1.0"
+nodeVersion = "22.12.0"
+docusaurusVersion = "3.10.1"
+docusaurusOpenapiDocsVersion = "5.0.2"
+remarkPlantumlVersion = "1.0.2"
+
 [libraries]
 # KTOR
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktorVersion" }
@@ -102,3 +109,4 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktorVersion" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPluginVersion" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqubeVersion" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "nodeGradleVersion" }

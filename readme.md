@@ -1,17 +1,32 @@
-# Cleanup-Service (Kotlin)
+# coupon-kotlin
 
-## Project description
+Kotlin/Ktor coupon service. Full technical documentation lives can be accessed
+here: <https://kaufa-digits.github.io/coupon-kotlin-gobbi/> or in the `documentation/`
+module and is rendered by Docusaurus.
 
-This project is a Kotlin migration of the Java Cleanup-Service (coupon-java) that was started but not finished yet. It was planned to split up in two modules for separation of concerns (API to manage coupons and the cleanup scheduler).
+## Local setup
 
-## Setup local development environment
+```bash
+# 1. Install the JDK pinned in .sdkmanrc (currently Java 25.0.3-zulu).
+sdk env install
 
-### Precondition:
+# 2. Download the OpenTelemetry Java agent referenced by the IntelliJ run configs.
+curl -L -o opentelemetry-javaagent.jar \
+  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
+```
 
-- Local Podman (https://podman.io) or Docker available
-- Bruno installed (https://www.usebruno.com)
-- MongoDB Compass (https://www.mongodb.com/products/tools/compass)
+Node **22** is required for the frontend and documentation modules. The Gradle build
+of the `documentation` module downloads its own Node 22 via the
+`com.github.node-gradle.node` plugin, so a system-wide install is only needed if you
+want to run npm directly.
 
-1. Provide the MongoDB through docker-compose with your preferred tool (Podman/Docker)
-2. Run Cleanup (run configuration for IntelliJ provided) and/or implemented API application
-3. Import coupon-api as Bruno collection
+## Build the documentation
+
+```bash
+./gradlew :documentation:build              # static site → documentation/build/site
+./gradlew :documentation:docusaurusStart    # dev server with hot reload (port 3000)
+```
+
+The site covers architecture, local setup, IntelliJ run configs, tracing and the
+interactive OpenAPI reference. Open `documentation/build/site/index.html` after a
+build, or visit <http://localhost:3000> when running the dev server.
