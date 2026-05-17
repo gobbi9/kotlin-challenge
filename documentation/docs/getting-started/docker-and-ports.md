@@ -93,7 +93,7 @@ on every `compose up`.
 
 For production builds we'd want to swap the hand-written Dockerfiles for a Gradle-driven
 image-builder so the result is reproducible from the build graph and doesn't drift from
-`gradle/libs.versions.toml`:
+`gradle/libs.toml`:
 
 - [**Google Jib**](https://github.com/GoogleContainerTools/jib) — daemonless, layered
   images straight from the JVM modules; well integrated with Gradle.

@@ -1,0 +1,3 @@
+[tools]
+java = "zulu-25.34.17.0" # equivalent to 25.0.3
+node = "22.12.0"

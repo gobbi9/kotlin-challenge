@@ -22,7 +22,7 @@ schema migrations, and a Vue 3 frontend.
 
 ## Stack at a glance
 
-- **Language / runtime:** Kotlin 2.3, JDK 25 (Zulu, via `.sdkmanrc`).
+- **Language / runtime:** Kotlin 2.3, JDK 25 (Zulu, via `mise.toml`).
 - **Web framework:** [Ktor](https://ktor.io) 3.4 with Netty.
 - **Persistence:** MongoDB 8 with the Kotlin coroutine driver.
 - **DI:** Koin 4.
@@ -33,7 +33,7 @@ schema migrations, and a Vue 3 frontend.
 ## Quick start
 
 ```bash
-sdk env install                            # JDK 25 (Zulu) and tooling
+mise install                            # JDK 25 (Zulu) and tooling
 docker compose up --build -d               # MongoDB, Jaeger, services and frontend
 ./gradlew :documentation:docusaurusStart   # this site, with hot reload
 ```

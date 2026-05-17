@@ -7,8 +7,8 @@ module and is rendered by Docusaurus.
 ## Local setup
 
 ```bash
-# 1. Install the JDK pinned in .sdkmanrc (currently Java 25.0.3-zulu).
-sdk env install
+# 1. Install the JDK pinned in mise.toml (currently Java zulu-25.34.17.0).
+mise install
 
 # 2. Download the OpenTelemetry Java agent referenced by the IntelliJ run configs.
 curl -L -o opentelemetry-javaagent.jar \

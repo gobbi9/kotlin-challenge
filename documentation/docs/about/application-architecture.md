@@ -67,7 +67,7 @@ coupon-kotlin/
 └── documentation      ── this Docusaurus site
 ```
 
-### Key dependencies (from `gradle/libs.versions.toml`)
+### Key dependencies (from `gradle/libs.toml`)
 
 | Module          | Stack                             | Notable libraries                                                |
 |-----------------|-----------------------------------|------------------------------------------------------------------|
@@ -80,7 +80,7 @@ coupon-kotlin/
 | `documentation` | Docusaurus 3.7                    | `docusaurus-theme-openapi-docs`, PlantUML, Mermaid               |
 
 Gradle drives the JVM modules with a JDK 25 toolchain (configured in the root
-`build.gradle.kts`) and Java 25 is pinned via `.sdkmanrc`.
+`build.gradle.kts`) and Java 25 is pinned via `mise.toml`.
 
 ## Module responsibilities
 

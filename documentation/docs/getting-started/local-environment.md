@@ -12,8 +12,8 @@ This page walks you from a freshly-cloned repository to a running stack.
 
 | Tool                                                              | Version                                 | Purpose                                                                                                                                    |
 |-------------------------------------------------------------------|-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| [SDKMAN!](https://sdkman.io)                                      | latest                                  | Manages the Java toolchain.                                                                                                                |
-| JDK                                                               | **25.0.3-zulu** (pinned in `.sdkmanrc`) | Builds the Kotlin/Ktor modules.                                                                                                            |
+| [mise](https://mise.jdx.dev)                                      | latest                                  | Manages the Java and Node toolchains.                                                                                                      |
+| JDK                                                               | **25.0.3-zulu** (pinned in `mise.toml`) | Builds the Kotlin/Ktor modules.                                                                                                            |
 | Node.js                                                           | **22.12+ LTS**                          | Runs Vite (frontend) and Docusaurus (this site). The `node-gradle` plugin will download Node 22.12 automatically for documentation builds. |
 | Docker / Podman                                                   | recent                                  | Runs MongoDB, Jaeger and (optionally) the apps.                                                                                            |
 | [Bruno](https://www.usebruno.com)                                 | latest                                  | Hand-curated REST collection (`coupon-api/`).                                                                                              |
@@ -22,21 +22,17 @@ This page walks you from a freshly-cloned repository to a running stack.
 ## Tooling install
 
 ```bash
-# 1. JDK pinned in .sdkmanrc
-sdk env install
+# 1. JDK and Node pinned in mise.toml
+mise install
 
 # 2. OpenTelemetry Java agent (referenced from .run/Service.run.xml and Cleanup.run.xml)
 curl -L -o opentelemetry-javaagent.jar \
   https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
-
-# 3. (Optional) Node 22.12+ — only needed for running the frontend or docs outside Gradle
-nvm install 22.12
-nvm use 22.12
 ```
 
 :::tip
 Gradle's JVM toolchain mechanism will provision the right JDK automatically once
-`.sdkmanrc` is sourced, so you don't need to install JDK 25 globally.
+`mise.toml` is present and mise is active, so you don't need to install JDK 25 globally.
 :::
 
 ## Start the stack with Docker Compose
