@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.1">
 <title data-rh="true">Docker &amp; Ports | coding challenge</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://gobbi9.github.io/kotlin-challenge/img/social-card.png"><meta data-rh="true" name="twitter:image" content="https://gobbi9.github.io/kotlin-challenge/img/social-card.png"><meta data-rh="true" property="og:url" content="https://gobbi9.github.io/kotlin-challenge/getting-started/docker-and-ports"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Docker &amp; Ports | coding challenge"><meta data-rh="true" name="description" content="docker-compose.yml orchestrates seven services. Ordering is enforced through"><meta data-rh="true" property="og:description" content="docker-compose.yml orchestrates seven services. Ordering is enforced through"><link data-rh="true" rel="icon" href="/kotlin-challenge/img/coupon-favicon.svg"><link data-rh="true" rel="canonical" href="https://gobbi9.github.io/kotlin-challenge/getting-started/docker-and-ports"><link data-rh="true" rel="alternate" href="https://gobbi9.github.io/kotlin-challenge/getting-started/docker-and-ports" hreflang="en"><link data-rh="true" rel="alternate" href="https://gobbi9.github.io/kotlin-challenge/getting-started/docker-and-ports" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Docker & Ports","item":"https://gobbi9.github.io/kotlin-challenge/getting-started/docker-and-ports"}]}</script><link rel="stylesheet" href="/kotlin-challenge/assets/css/styles.cf607252.css">
-<script src="/kotlin-challenge/assets/js/runtime~main.46a93796.js" defer="defer"></script>
+<script src="/kotlin-challenge/assets/js/runtime~main.af7c38b9.js" defer="defer"></script>
 <script src="/kotlin-challenge/assets/js/main.536606fa.js" defer="defer"></script>
 </head>
 <body>
@@ -102,7 +102,7 @@ are tuned for <strong>local development</strong> — predictable layout, easy to
 on every <code>compose up</code>.</p>
 <p>For production builds we&#x27;d want to swap the hand-written Dockerfiles for a Gradle-driven
 image-builder so the result is reproducible from the build graph and doesn&#x27;t drift from
-<code>gradle/libs.versions.toml</code>:</p>
+<code>gradle/libs.toml</code>:</p>
 <ul>
 <li class=""><a href="https://github.com/GoogleContainerTools/jib" target="_blank" rel="noopener noreferrer" class=""><strong>Google Jib</strong></a> — daemonless, layered
 images straight from the JVM modules; well integrated with Gradle.</li>
