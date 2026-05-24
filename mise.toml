@@ -1,3 +1,14 @@
 [tools]
 java = "zulu-25.34.17.0" # equivalent to 25.0.3
 node = "22.12.0"
+
+[env]
+# This script is sourced by mise whenever the environment is loaded.
+# It ensures that the OpenTelemetry Java agent is downloaded if missing.
+_.source = ".mise.setup.sh"
+
+[tasks."download-otel"]
+description = "Download OpenTelemetry Java agent"
+run = "curl -L https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar -o opentelemetry-javaagent.jar"
+outputs = ["opentelemetry-javaagent.jar"]
+sources = ["mise.toml"]

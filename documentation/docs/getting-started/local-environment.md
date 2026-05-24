@@ -23,11 +23,8 @@ This page walks you from a freshly-cloned repository to a running stack.
 
 ```bash
 # 1. JDK and Node pinned in mise.toml
+# This also downloads the OpenTelemetry Java agent automatically via .mise.setup.sh.
 mise install
-
-# 2. OpenTelemetry Java agent (referenced from .run/Service.run.xml and Cleanup.run.xml)
-curl -L -o opentelemetry-javaagent.jar \
-  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 ```
 
 :::tip

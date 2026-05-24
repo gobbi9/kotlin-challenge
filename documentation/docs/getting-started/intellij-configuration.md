@@ -24,7 +24,7 @@ Both Ktor configs pass:
 -javaagent:$PROJECT_DIR$/opentelemetry-javaagent.jar
 ```
 
-If the agent jar isn't present yet, fetch it once (see the
+The agent jar is automatically downloaded by `mise install` (see the
 [Local Environment](./local-environment#tooling-install) page).
 
 ## Env files

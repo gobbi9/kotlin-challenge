@@ -13,7 +13,7 @@ on `:4317` and visible at <http://localhost:16686>.
 ## OpenTelemetry agent
 
 Both `Service` and `Cleanup` IntelliJ run configurations attach the OpenTelemetry Java
-agent:
+agent (automatically downloaded by `mise install`):
 
 ```text
 -javaagent:$PROJECT_DIR$/opentelemetry-javaagent.jar

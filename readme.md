@@ -8,11 +8,8 @@ module and is rendered by Docusaurus.
 
 ```bash
 # 1. Install the JDK pinned in mise.toml (currently Java zulu-25.34.17.0).
+# This also downloads the OpenTelemetry Java agent automatically via .mise.setup.sh.
 mise install
-
-# 2. Download the OpenTelemetry Java agent referenced by the IntelliJ run configs.
-curl -L -o opentelemetry-javaagent.jar \
-  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 ```
 
 Node **22** is required for the frontend and documentation modules. The Gradle build
